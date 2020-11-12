@@ -1,4 +1,4 @@
-# SOEN341_PROJECT_B
+# SOEN341 - PROJECT B
 Cross Assembler for Cm Virtual Machine
 
 ### Team B6
