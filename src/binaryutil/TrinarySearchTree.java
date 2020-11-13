@@ -1,9 +1,7 @@
 package binaryutil;
 
 import java.util.NoSuchElementException;
-import java.util.Queue;
-
-public class TripleSearchTree{
+public class TrinarySearchTree{
     
     private Node root;             // root of BST
 
@@ -26,7 +24,7 @@ public class TripleSearchTree{
     /**
      * Initializes an empty symbol table.
      */
-    public TripleSearchTree() {
+    public TrinarySearchTree() {
         //Empty
     }
 
@@ -165,7 +163,7 @@ public class TripleSearchTree{
 
 
     public static void main(String[] args){
-        TripleSearchTree instructions = new TripleSearchTree();
+        TrinarySearchTree instructions = new TrinarySearchTree();
         String[] a = {"ldv", "halt", "trap", "add"};
         String[] comment = {"Load Variable", "Stop Machine", "Return exit", "Addition of constant"};
         int[] add = {0x44, 0x33, 0x55, 0x40};

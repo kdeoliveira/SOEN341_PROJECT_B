@@ -1,3 +1,3 @@
-halt 0x44 Interuupt 
-trap 0xAA Return 
-add 0xBF Addition 
+halt 0x44 Interupt computer
+trap 0xAA Return an exit value
+add 0xBF Addition
