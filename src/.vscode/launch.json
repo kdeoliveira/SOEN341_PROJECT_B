@@ -1,0 +1,57 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Test<src_aae217a>",
+            "request": "launch",
+            "mainClass": "Test",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-BinaryAddress<src_aae217a>",
+            "request": "launch",
+            "mainClass": "binaryutil.BinaryAddress",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ReadOpcodes<src_aae217a>",
+            "request": "launch",
+            "mainClass": "binaryutil.ReadOpcodes",
+            "projectName": "src_aae217a",
+            "args": "binaryutil/file.txt"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-TripleSearchTree<src_aae217a>",
+            "request": "launch",
+            "mainClass": "binaryutil.TripleSearchTree",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Instruction<src_aae217a>",
+            "request": "launch",
+            "mainClass": "instruction.Instruction",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Opcode<src_aae217a>",
+            "request": "launch",
+            "mainClass": "instruction.Opcode",
+            "projectName": "src_aae217a"
+        }
+    ]
+}

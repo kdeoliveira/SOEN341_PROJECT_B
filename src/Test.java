@@ -5,8 +5,8 @@ public class Test {
     public static void main(String[] args){
 
 
-        int y = 170;
-        String hex = "AA";
+        int y = 0x44;
+        String hex = "0xAA";
 
         System.out.println(Integer.toHexString(y).length());
 

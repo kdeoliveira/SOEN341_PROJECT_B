@@ -120,7 +120,7 @@ public class BinaryAddress {
 
 
     public static void main(String[] args){
-        BinaryAddress mem = new BinaryAddress("0xa0", false);
+        BinaryAddress mem = new BinaryAddress("0xBF", false);
         BinaryAddress mem1 = new BinaryAddress(0x01, false);
 
         System.out.println(mem +"\t" + mem.getHexCode());

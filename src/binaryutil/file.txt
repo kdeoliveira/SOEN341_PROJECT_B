@@ -1,0 +1,3 @@
+halt 0x44 Interuupt 
+trap 0xAA Return 
+add 0xBF Addition 
