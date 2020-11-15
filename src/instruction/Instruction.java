@@ -1,6 +1,6 @@
 package instruction;
 
-import binaryutil.BinaryAddress;
+import util.BinaryAddress;
 
 public abstract class Instruction {
     protected Opcode opcode;

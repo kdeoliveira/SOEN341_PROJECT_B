@@ -1,6 +1,6 @@
 package instruction;
 
-import binaryutil.BinaryAddress;
+import util.BinaryAddress;
 
 public class ByteInstruction extends Instruction {
     

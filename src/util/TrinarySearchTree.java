@@ -1,4 +1,4 @@
-package binaryutil;
+package util;
 
 import java.util.NoSuchElementException;
 public class TrinarySearchTree{

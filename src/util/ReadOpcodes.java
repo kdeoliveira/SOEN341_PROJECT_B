@@ -1,4 +1,4 @@
-package binaryutil;
+package util;
 
 import java.io.FileInputStream;
 
@@ -7,7 +7,6 @@ public class ReadOpcodes {
         TrinarySearchTree inst = new TrinarySearchTree();
         if(args.length == 0)    return;
         try(FileInputStream src = new FileInputStream(args[0])){
-            int c;
             int counter = 0;
             StringBuilder word = new StringBuilder();
             String key = "";
@@ -52,6 +51,7 @@ public class ReadOpcodes {
                         }
                     counter = 0;
                     inst.put(key, value, comment);
+                    comment = "";
                     word.delete(0, word.length());
                 }
 
