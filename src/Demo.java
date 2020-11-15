@@ -2,8 +2,6 @@ import util.*;
 
 import java.io.IOException;
 
-import field.*;
-
 public class Demo{
 
     public static void main(String[] args){
