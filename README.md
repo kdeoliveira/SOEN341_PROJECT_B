@@ -7,6 +7,7 @@ Cross Assembler for Cm Virtual Machine
 * Kevin de Oliveira
 * Titus Poenaru
 * Tiago Strobino
+* Ismael Rekik
 
 ### Progress
 - [ ] Sprint1
