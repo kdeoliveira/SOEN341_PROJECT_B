@@ -52,7 +52,7 @@ public class TrinarySearchTree{
 
     private BinaryAddress getAddress(Node x, String key) {
         if (key == null) throw new IllegalArgumentException("calls get() with a null key");
-        if (x == null) return null;
+        if (x == null) throw new NoSuchElementException();
         int cmp = key.compareTo(x.key);
         if      (cmp < 0) return getAddress(x.left, key);
         else if (cmp > 0) return getAddress(x.right, key);

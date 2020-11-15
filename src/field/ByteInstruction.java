@@ -1,4 +1,4 @@
-package instruction;
+package field;
 
 import util.BinaryAddress;
 

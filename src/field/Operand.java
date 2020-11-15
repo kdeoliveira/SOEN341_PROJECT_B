@@ -1,6 +1,6 @@
-package instruction;
+package field;
 
-import binaryutil.BinaryAddress;
+import util.BinaryAddress;
 
 public class Operand {
     protected BinaryAddress binary;

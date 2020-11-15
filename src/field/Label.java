@@ -1,4 +1,4 @@
-package instruction;
+package field;
 
 public class Label extends Operand{
     

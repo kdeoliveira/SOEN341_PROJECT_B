@@ -43,7 +43,7 @@ public class BinaryAddress {
      * GETTERS AND SETTERS
      */
     public String getHexCode(){
-        return Arrays.toString(hexCode);
+        return hexCode != null ? Arrays.toString(hexCode) : null;
     }
 
     public int getBinaryAddress(){
