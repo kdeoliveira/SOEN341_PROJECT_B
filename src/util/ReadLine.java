@@ -98,7 +98,7 @@ public class ReadLine implements Closeable, Iterable<String[]> {
 
     public static void main(String[] args){
 
-        try(ReadLine rl = new ReadLine("util/file.txt")){
+        try(ReadLine rl = new ReadLine("file.txt")){
 
             // for(String[] x : rl){
             //     System.out.println(Arrays.toString(x));
