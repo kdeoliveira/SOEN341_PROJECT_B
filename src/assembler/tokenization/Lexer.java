@@ -47,7 +47,7 @@ public class Lexer{
 
     public static void main(String[] args){
         Lexer lex = new Lexer();
-        lex.tokenization("Kevin", "add.u8");
+        lex.tokenization("Label", "add.u8");
         lex.tokenization(";kfsfsd  5478756 4fd");
 
         System.out.println(Arrays.toString(lex.getTokens()));

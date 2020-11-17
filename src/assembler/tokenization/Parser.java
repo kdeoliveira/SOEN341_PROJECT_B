@@ -28,11 +28,7 @@ public class Parser {
                 System.out.println(this.semantic[i].name());
             }
         }
-        
-
-
     }
-
 
     public static void main(String[] args){
         Lexer lex = new Lexer();

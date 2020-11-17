@@ -1,7 +1,7 @@
 package assembler.tokenization;
 
 public enum SYNTAX{
-    OPCODE("([a-z])+(\\.[ui](3|5|8)$)?"), OPERAND("\\p{Upper}\\p{Lower}+"), COMMENT("[;].+");
+    OPCODE("([a-z])+(\\.[ui](3|5|8)$)?"), OPERAND("\\p{Upper}\\p{Lower}+|[0-9]+"), COMMENT("[;].+");
 
     public final String pattern;
 
