@@ -1,7 +1,5 @@
 package assembler.tokenization;
 
-import java.util.Arrays;
-
 public enum SEMANTIC {
     INHERENT(SYNTAX.OPCODE), IMMEDIATE(SYNTAX.OPCODE), BYTE(SYNTAX.OPCODE, SYNTAX.OPERAND);
 
