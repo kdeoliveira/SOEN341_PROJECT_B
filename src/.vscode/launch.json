@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Parser",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Parser",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SEMANTIC",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.SEMANTIC",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Lexer",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Lexer",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TYPE",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.TYPE",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Demo",
             "request": "launch",
             "mainClass": "Demo",

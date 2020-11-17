@@ -14,14 +14,16 @@ public class ReadLine implements Closeable, Iterable<String[]> {
     private FileInputStream src;
     private StringBuilder lineArray;
     private Queue<String[]> queueOfLines;
+    private int numberOfElemenets;
 
-    public ReadLine(FileInputStream src){
+    public ReadLine(FileInputStream src, int n){
         this.src = src;
         this.lineArray = new StringBuilder();
         this.queueOfLines = new LinkedList<>();
+        this.numberOfElemenets = n;
     }
 
-    public ReadLine(String src) throws IOException {
+    public ReadLine(String src, int n) throws IOException {
 
         try {
             this.src = new FileInputStream(src);
@@ -30,18 +32,22 @@ public class ReadLine implements Closeable, Iterable<String[]> {
             e.printStackTrace();
         }
         this.lineArray = new StringBuilder();
-        this.queueOfLines = new LinkedList<>();      
-
+        this.queueOfLines = new LinkedList<>();
+        this.numberOfElemenets = n;
     }
 
     public String[] oneline() throws IOException {
         this.lineArray.delete(0, this.lineArray.length());
         this.execute(src.read());
-        String[] temp = this.lineArray.toString().split(" ", 3);
+        String[] temp = this.lineArray.toString().split(" ", this.numberOfElemenets);
 
         if(temp.length <= 1)     return new String[0];
         queueOfLines.add(temp);
         return temp;
+    }
+
+    public boolean isEmpty() throws IOException {
+        return this.src.available() == 0;
     }
 
 
@@ -98,15 +104,15 @@ public class ReadLine implements Closeable, Iterable<String[]> {
 
     public static void main(String[] args){
 
-        try(ReadLine rl = new ReadLine("util/file.txt")){
+        try(ReadLine rl = new ReadLine("file.txt", 4)){
 
-            // for(String[] x : rl){
-            //     System.out.println(Arrays.toString(x));
-            // }
-            
-            for(String[] x : rl.allLines()){
+            for(String[] x : rl){
                 System.out.println(Arrays.toString(x));
             }
+            
+            // for(String[] x : rl.allLines(), 3){
+            //     System.out.println(Arrays.toString(x));
+            // }
             
 
         } catch (IOException e) {
