@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Parser {
-    private Token[] token;
+    private ArrayList<SYNTAX> type;
     private final SEMANTIC[] semantic;
 
-    public Parser(Token...tokens){
-        this.token = tokens;
+    public Parser(){
         this.semantic = SEMANTIC.values();
+        type = new ArrayList<>();
     }
 
-    public void parse(){
-
-        ArrayList<SYNTAX> type = new ArrayList<>();
-        if(this.token.length > 0)
-            for(Token x : this.token)
+    public Object[] parse(Token...tokens){
+        boolean flag = false;
+        type = new ArrayList<>();
+        if(tokens.length > 0)
+            for(Token x : tokens)
                 type.add(x.getType());
         
         
@@ -25,9 +25,17 @@ public class Parser {
         {
             if(Arrays.equals(this.semantic[i].getType(), type.toArray(new SYNTAX[0])))
             {
-                System.out.println(this.semantic[i].name());
+                flag = true;
             }
         }
+
+        if(flag)    return tokens;
+        else        return new Object[0];
+        
+    }
+
+    public Object[] getType() {
+        return this.type.toArray(new SYNTAX[0]);
     }
 
     public static void main(String[] args){
@@ -38,8 +46,8 @@ public class Parser {
 
         System.out.println(Arrays.toString(lex.getTokens()));
 
-        Parser parser = new Parser(tokens);
-        parser.parse();
+        Parser parser = new Parser();
+        parser.parse(tokens);
     }
 
 
