@@ -1,3 +1,0 @@
-halt 0x44 Interupt computer
-trap 0xAA
-add 0xBF Addition

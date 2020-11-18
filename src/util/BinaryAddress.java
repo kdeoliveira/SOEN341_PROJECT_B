@@ -1,10 +1,10 @@
 package util;
-import java.util.Arrays;
 
 public class BinaryAddress {
     
     private int binaryAddress;
     private boolean signed = false;
+    private int format;
     private char[] hexCode;
 
     /**
@@ -14,28 +14,33 @@ public class BinaryAddress {
     public BinaryAddress(String hex, boolean signed){
         this.binaryAddress = Integer.decode(hex);
         this.signed = signed;
-        this.hexCode = new char[Integer.toHexString(this.binaryAddress).length()];
         this.hexCode = this.convertHex(this.binaryAddress);
+        this.format = 8;
+    }
+    public BinaryAddress(int hex){
+        this.binaryAddress = hex;        
+        this.signed = false;
+        this.hexCode = this.convertHex(this.binaryAddress);
+        this.format = 8;
     }
     public BinaryAddress(int hex, boolean signed){
         this.binaryAddress = hex;        
         this.signed = signed;
-        this.hexCode = new char[Integer.toHexString(this.binaryAddress).length()];
         this.hexCode = this.convertHex(this.binaryAddress);
+        this.format = 8;
     }
     public BinaryAddress(int hex, boolean signed, int range){
         if(hex > (int) Math.pow(2, range) - 1)     throw new OutOfMemoryError();
         this.binaryAddress = hex;        
         this.signed = signed;
-        this.hexCode = new char[Integer.toHexString(this.binaryAddress).length()];
         this.hexCode = this.convertHex(this.binaryAddress);
+        this.format = range;
     }
-    public BinaryAddress(char[] hex, boolean signed){
-        char[] tempHex = Arrays.copyOf(hex, hex.length);
-        this.signed = signed;
-        this.binaryAddress = (byte) ((Character.digit(tempHex[0],16) << 4) + (Character.digit(tempHex[1], 16)));
-        this.hexCode = this.convertHex(this.binaryAddress);
-    }
+    // public BinaryAddress(char[] hex, boolean signed){
+    //     char[] tempHex = Arrays.copyOf(hex, hex.length);
+    //     this.signed = signed;
+    //     this.hexCode = this.convertHex(this.binaryAddress);
+    // }
 
     
 
@@ -43,11 +48,15 @@ public class BinaryAddress {
      * GETTERS AND SETTERS
      */
     public String getHexCode(){
-        return hexCode != null ? Arrays.toString(hexCode) : null;
+        return hexCode != null ? this.hexFormat(hexCode) : null;
     }
 
     public int getBinaryAddress(){
         return this.binaryAddress;
+    }
+
+    public String getBinaryAddressString(){
+        return toBinaryFormat(this.binaryAddress);
     }
 
     public boolean isSigned(){
@@ -57,11 +66,51 @@ public class BinaryAddress {
     private char[] convertHex(int binary){
         return Integer.toHexString(binary).toCharArray();
     }
+
+    public void setSigned(boolean signed) {
+        this.signed = signed;
+    }
+
+    /**
+     * Print hex format with leading 0 
+     * @param character
+     * @return
+     */
+    private String hexFormat(char...character){
+        StringBuilder str = new StringBuilder();
+        
+        if(character.length == 0)   return str.toString();
+
+        int bits = 0;
+        if(character.length < this.format/4)
+            bits = (this.format/4) - character.length;
+
+        for(int i=0; i < bits; i++)
+            str.insert(0,"0");
+
+        for(char x : character){
+            str.append(x);
+        }
+        return str.toString().toUpperCase();
+    }
+
+    private String toBinaryFormat(int binary){
+        StringBuilder str = new StringBuilder(Integer.toBinaryString(binary));
+
+
+        int bits = 0;
+        if(str.length() < this.format)
+            bits = this.format - str.length();
+        for(int i=0; i < bits; i++)
+            str.insert(0,"0");
+        return str.toString();
+    }
+
     
 
     @Override
     public String toString(){
-        return Integer.toBinaryString(this.binaryAddress);
+        return toBinaryFormat(this.binaryAddress);
     }
 
 
@@ -114,7 +163,7 @@ public class BinaryAddress {
     }
 
     public BinaryAddress concat(BinaryAddress x){
-        return new BinaryAddress(((this.binaryAddress << 4) + (x.binaryAddress & 0xff)), false);
+        return new BinaryAddress(((this.binaryAddress << 4) + (x.binaryAddress & 0xff)), false, 16);
     }
 
 

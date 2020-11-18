@@ -6,27 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - cma",
-            "request": "launch",
-            "mainClass": "cma",
-            "projectName": "src"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - Demo",
-            "request": "launch",
-            "mainClass": "Demo",
-            "projectName": "src"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - ReadLine",
-            "request": "launch",
-            "mainClass": "util.ReadLine",
-            "projectName": "src"
-        },
-        {
-            "type": "java",
             "name": "CodeLens (Launch) - BinaryAddress",
             "request": "launch",
             "mainClass": "util.BinaryAddress",

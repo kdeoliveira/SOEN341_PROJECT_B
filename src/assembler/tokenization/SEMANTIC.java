@@ -1,7 +1,9 @@
 package assembler.tokenization;
 
 public enum SEMANTIC {
-    INHERENT(SYNTAX.OPCODE), IMMEDIATE(SYNTAX.OPCODE), BYTE(SYNTAX.OPCODE, SYNTAX.OPERAND);
+    INHERENT(SYNTAX.OPCODE), 
+    IMMEDIATE(SYNTAX.OPCODE), 
+    BYTE(SYNTAX.OPCODE, SYNTAX.OPERAND);
 
     private final SYNTAX[] type;
 
@@ -12,8 +14,6 @@ public enum SEMANTIC {
     public boolean contains(SYNTAX type){
         return this.contains(type);
     }
-
-
 
     public SYNTAX[] getType() {
         return type;
