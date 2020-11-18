@@ -1,13 +1,14 @@
 import util.*;
 import assembler.*;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Demo{
 
     public static void main(String[] args) {
         TrinarySearchTree<String, String> tst = new TrinarySearchTree<>();
 
-        try(ReadLine file = new ReadLine("file.txt",3);
+        try(ReadLine file = new ReadLine("dictionary.txt",3);
         ReadLine src = new ReadLine("input.asm",4))
         {
             for(String[] x : file){
@@ -16,6 +17,8 @@ public class Demo{
 
             Engine eng = new Engine(tst, src);
             eng.line();
+
+            System.out.println("Machine Code\tHex\tMnemonic");
 
             for(Node x : eng.getLinestatement())
                 System.out.println(x);
