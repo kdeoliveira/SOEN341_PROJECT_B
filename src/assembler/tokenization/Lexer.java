@@ -39,6 +39,7 @@ public class Lexer{
         if(this.tokenLength == 0)    this.tokenLength += input.length - 1;
         else                        this.tokenLength += input.length;
 
+        if(input.length == 0 || input[0].equals(""))       return true;
         for(String x : input)
             this.tokenLength += internalTokenization(this.pattern.matcher((CharSequence) x), x);
 

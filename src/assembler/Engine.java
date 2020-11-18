@@ -29,6 +29,10 @@ public class Engine {
         Parser parser = new Parser();
         errors = new ArrayList<>();
         Token[] tok;
+        if(str[0].length() == 0){
+            line();
+            return;
+        }
         //If line has error, then stop (return)
         if(!lex.tokenization(str)){
             System.out.println("Syntax Error: "+Arrays.toString(lex.getErrors()));
