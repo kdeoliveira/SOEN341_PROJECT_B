@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - BinaryAddress",
+            "request": "launch",
+            "mainClass": "util.BinaryAddress",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Parser",
             "request": "launch",
             "mainClass": "assembler.tokenization.Parser",

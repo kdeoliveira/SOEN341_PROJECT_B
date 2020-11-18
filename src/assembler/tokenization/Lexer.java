@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.*;
 
+import util.TrinarySearchTree;
+
 public class Lexer{
     private ArrayList<Token> tokens;
     private int tokenPosition;          // Character position start from 1 to String.length()
     private int tokenLength;
+    private ArrayList<String> errors;
     private final Pattern pattern;
 
     public Lexer(){
         this.tokens = new ArrayList<>();
+        this.errors = new ArrayList<>();
         this.tokenPosition = 0;
         this.tokenLength = 0;
 
@@ -21,12 +25,12 @@ public class Lexer{
         this.pattern = Pattern.compile(regex.substring(1));
     }
 
-    public Lexer(CharSequence regex){
-        this.tokens = new ArrayList<>();
-        this.tokenPosition = 0;
-        this.tokenLength = 0;
-        this.pattern = Pattern.compile(regex.toString());
-    }
+    // public Lexer(TrinarySearchTree<String, String> dictionary){
+    //     this.tokens = new ArrayList<>();
+    //     this.tokenPosition = 0;
+    //     this.tokenLength = 0;
+    //     this.pattern = null;
+    // }
 
 
     public boolean tokenization(String...input){
@@ -51,9 +55,11 @@ public class Lexer{
             }            
         }else{
             this.tokenPosition = matcher.end() + this.tokenLength;
+            this.errors.add(this.tokenPosition+" -> "+in.substring(0, matcher.end())+"["
+            +in.substring(matcher.end())+"]");
             
-            System.out.println("Syntax error:"+this.tokenPosition+" -> "+in.substring(0, matcher.end())+"["
-                                                +in.substring(matcher.end())+"]");
+            // System.out.println("Syntax error:"+this.tokenPosition+" -> "+in.substring(0, matcher.end())+"["
+            //                                     +in.substring(matcher.end())+"]");
         }        
 
         return in.length();
@@ -69,6 +75,10 @@ public class Lexer{
 
     public Token[] getTokens(){
         return this.tokens.toArray(new Token[0]);
+    }
+
+    public String[] getErrors() {
+        return errors.toArray(new String[0]);
     }
 
     /**

@@ -1,0 +1,10 @@
+/.classpath
+/.project
+/.vscode/
+/Demo.class
+/Test.class
+/assembler/
+/dictionary.txt
+/input.asm
+/projectB.code-workspace
+/util/

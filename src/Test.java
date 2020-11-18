@@ -10,6 +10,12 @@ public class Test {
 
         System.out.println(Integer.toHexString(y).length());
 
+        StringBuilder str = new StringBuilder();
+        
+
+        str.append(Integer.toBinaryString(y));
+        System.out.println(str.toString());
+
 
         
 
