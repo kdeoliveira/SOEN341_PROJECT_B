@@ -104,7 +104,7 @@ public class ReadLine implements Closeable, Iterable<String[]> {
 
     public static void main(String[] args){
 
-        try(ReadLine rl = new ReadLine("dictionary.txt", 3)){
+        try(ReadLine rl = new ReadLine("input.asm", 3)){
 
             for(String[] x : rl){
                 System.out.println(Arrays.toString(x));

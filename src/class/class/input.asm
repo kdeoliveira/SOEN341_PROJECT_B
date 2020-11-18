@@ -13,7 +13,7 @@
  add
  sub
  mul
- div.u8
+ div
  rem
  shl
  shr
