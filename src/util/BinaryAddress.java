@@ -17,6 +17,12 @@ public class BinaryAddress {
         this.hexCode = new char[Integer.toHexString(this.binaryAddress).length()];
         this.hexCode = this.convertHex(this.binaryAddress);
     }
+    public BinaryAddress(int hex){
+        this.binaryAddress = hex;        
+        this.signed = false;
+        this.hexCode = new char[Integer.toHexString(this.binaryAddress).length()];
+        this.hexCode = this.convertHex(this.binaryAddress);
+    }
     public BinaryAddress(int hex, boolean signed){
         this.binaryAddress = hex;        
         this.signed = signed;
@@ -43,7 +49,7 @@ public class BinaryAddress {
      * GETTERS AND SETTERS
      */
     public String getHexCode(){
-        return hexCode != null ? Arrays.toString(hexCode) : null;
+        return hexCode != null ? this.hexFormat(hexCode) : null;
     }
 
     public int getBinaryAddress(){
@@ -56,6 +62,24 @@ public class BinaryAddress {
 
     private char[] convertHex(int binary){
         return Integer.toHexString(binary).toCharArray();
+    }
+
+    public void setSigned(boolean signed) {
+        this.signed = signed;
+    }
+
+    /**
+     * Print hex format with leading 0 
+     * @param character
+     * @return
+     */
+    private String hexFormat(char...character){
+        StringBuilder str = new StringBuilder();
+        if(character.length == 0)   return str.toString();
+        for(char x : character){
+            str.append(x);
+        }
+        return str.toString();
     }
     
 

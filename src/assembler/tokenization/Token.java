@@ -13,6 +13,7 @@ public class Token {
         return this.type;
     }
 
+
     public String getData() {
         return this.data;
     }

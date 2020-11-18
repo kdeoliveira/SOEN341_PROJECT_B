@@ -39,9 +39,9 @@ public class ReadLine implements Closeable, Iterable<String[]> {
     public String[] oneline() throws IOException {
         this.lineArray.delete(0, this.lineArray.length());
         this.execute(src.read());
-        String[] temp = this.lineArray.toString().split(" ", this.numberOfElemenets);
+        String[] temp = this.lineArray.toString().strip().split(" ", this.numberOfElemenets);
 
-        if(temp.length <= 1)     return new String[0];
+        if(temp.length < 1)     return new String[0];
         queueOfLines.add(temp);
         return temp;
     }
@@ -61,7 +61,7 @@ public class ReadLine implements Closeable, Iterable<String[]> {
         this.execute(this.src.read());
     }
 
-    public Iterable<String[]> allLines(){
+    public Queue<String[]> allLines(){
         
         while(this.iterator().hasNext())
             this.iterator().next();
@@ -104,13 +104,13 @@ public class ReadLine implements Closeable, Iterable<String[]> {
 
     public static void main(String[] args){
 
-        try(ReadLine rl = new ReadLine("file.txt", 4)){
+        try(ReadLine rl = new ReadLine("input.asm", 4)){
 
             for(String[] x : rl){
                 System.out.println(Arrays.toString(x));
             }
             
-            // for(String[] x : rl.allLines(), 3){
+            // for(String[] x : rl.allLines()){
             //     System.out.println(Arrays.toString(x));
             // }
             
