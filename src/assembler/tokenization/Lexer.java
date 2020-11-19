@@ -38,7 +38,8 @@ public class Lexer{
         // if(input.length == 0 || input[0].equals(""))       return true;
         int cnt = 0;
         for(CharSequence x : input){
-            this.tokenLength += internalTokenization(this.pattern.matcher(x), x.toString(), cnt);
+            if(!x.toString().isEmpty())
+                this.tokenLength += internalTokenization(this.pattern.matcher(x), x.toString(), cnt);
             cnt++;
         }
 
@@ -53,14 +54,12 @@ public class Lexer{
     }
 
     private int internalTokenization(Matcher matcher, String in, int cnt){
-        if(in.isEmpty())    return 0;
-
         if(matcher.find() && matcher.end() == in.length()){
             for(SYNTAX x : SYNTAX.values())
             {
                 if(matcher.group(x.name()) != null){
                     if((cnt == 0 && x == SYNTAX.OPCODE) || (cnt == 1 && x == SYNTAX.LABEL)){
-                        this.generateError(matcher, in);                        
+                        this.generateError(null, in);                        
                         return in.length();
                     }
                     tokens.add(new Token(x, matcher.group(x.name()).strip()));
@@ -75,6 +74,7 @@ public class Lexer{
 
     private void generateError(Matcher matcher, String input){
         try{
+            if(matcher == null) throw new IllegalStateException();
             this.tokenPosition = matcher.end() + this.tokenLength;
             this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,input.substring(0, matcher.end())+"["+input.substring(matcher.end())+"]")));
         }catch(IllegalStateException e){

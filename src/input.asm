@@ -5,7 +5,7 @@
  ret
  not Label
  and
-Label
+ Label
  xor
  neg
  inc
