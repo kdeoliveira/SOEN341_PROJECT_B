@@ -58,7 +58,7 @@ public class Parser{
 
     public static void main(String[] args){
         Lexer lex = new Lexer();
-        lex.tokenization("addu", "label");
+        lex.tokenization("Label");
 
         Token[] tokens = lex.getTokens().toArray(new Token[0]);
 

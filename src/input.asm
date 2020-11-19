@@ -3,9 +3,9 @@
  dup
  exit
  ret
- not
+ not Label
  and
- or
+ Label
  xor
  neg
  inc
@@ -13,7 +13,7 @@
  add
  sub
  mul
- div label 
+ div 
  rem
  shl
  shr

@@ -13,7 +13,7 @@ public class Node implements Vertex<String>{
     }
     public Node(BinaryAddress hex, String name){
         this.key = name;
-        this.value = hex;
+        this.value = hex != null ? hex : new BinaryAddress(0x0);
     }
 
     public String getKey() {
@@ -26,7 +26,7 @@ public class Node implements Vertex<String>{
 
     @Override
     public String toString(){
-        return String.format("%s\t%s\t%s", value, value.getHexCode(), key);
+        return String.format("%s\t%s\t%s", this.value, value.getHexCode(), key);
     }
 
     @Override

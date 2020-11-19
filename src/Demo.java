@@ -10,7 +10,7 @@ public class Demo{
     public static void main(String[] args) {
         Map<String,BinaryAddress> dic = new BinarySearchTree<>();
 
-        try(ReadLine file = new ReadLine("dictionary.txt",3);
+        try(ReadLine file = new ReadLine("dictionary",3);
         ReadLine src = new ReadLine("input.asm",4))
         {
             for(String[] x : file){
@@ -24,13 +24,13 @@ public class Demo{
                     break;
             }
 
-            System.out.println("#\tMachine Code\tHex\tMnemonic");
+            System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
 
             for(int i = 0; i < eng.getNumberOfLine() ; i++){
-                System.out.println(i+1+"\t"+
+                System.out.println((i+1)+"\t"+new BinaryAddress(i)+"\t"+
                 eng.getLinestatement().get(i));
             }
-            
+                        
             System.out.println("Error "+eng.getErrorList().size());
             for(CharSequence x : eng.getErrorList()){
                 System.out.println(x.toString());

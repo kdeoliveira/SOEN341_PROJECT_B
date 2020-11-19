@@ -1,9 +1,11 @@
 package assembler.tokenization;
 
 public enum EBNF {
+    LABEL(SYNTAX.LABEL),
     INHERENT(SYNTAX.OPCODE), 
     IMMEDIATE(SYNTAX.OPCODE), 
-    BYTE(SYNTAX.OPCODE, SYNTAX.OPERAND);
+    BYTE(SYNTAX.OPCODE, SYNTAX.OPERAND),
+    RELATIVE(SYNTAX.OPCODE, SYNTAX.LABEL);
 
     private final SYNTAX[] type;
 

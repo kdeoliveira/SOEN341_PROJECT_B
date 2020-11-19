@@ -30,7 +30,8 @@
             "name": "CodeLens (Launch) - cma",
             "request": "launch",
             "mainClass": "cma",
-            "projectName": "src"
+            "projectName": "src",
+            "args": "input.asm"
         },
         {
             "type": "java",
