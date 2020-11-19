@@ -1,61 +1,105 @@
 package assembler;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.*;
 
 import assembler.tokenization.*;
 import util.*;
 
 public class Engine {
-    private TrinarySearchTree<String, String> dictionary;
-    private ReadLine src;
-    private ArrayList<Node> linestatement;
-    private ArrayList<Token> errors;
+    private Map<String,BinaryAddress> dictMap;
 
-    public Engine(TrinarySearchTree<String, String> dict, ReadLine file) {
-        this.dictionary = dict;
-        this.src = file;
-        this.linestatement = new ArrayList<>();
+    private Map<Integer,Node> linestatement;
+    private List<CharSequence> errorList;
+    private int numberOfLine;
+    private BinaryAddress memoryAddress;
+    private Lexer lex;
+    private Parser parser;
+
+    public Engine(Map<String, BinaryAddress> dict, Lexer lexer, Parser parser) {
+        this.dictMap = dict;
+
+        this.memoryAddress = new BinaryAddress(0x0);
+
+        this.linestatement = new HashMap<>();
+        this.errorList = new ArrayList<>();
+        this.numberOfLine = 0;
+        this.lex = lexer;
+        this.parser = parser;
     }
 
-    public void line() throws IOException {
-        if(this.src.iterator().hasNext())
-            check(this.src.oneline());
+    public boolean assemble(String...code){
+        if(code.length == 0)    return false;
+        
+        if(!this.checkSyntax(code) || 
+        !this.checkSemantic(lex.getTokens().toArray(new Token[0])) || 
+        !this.checkDictionary(lex.getTokens().toArray(new Token[0]))) return false;
+        
+        this.numberOfLine++;
+        this.memoryAddress.plus(0x1);
+        return true;
     }
 
-    private void check(String[] str) throws IOException {
-        Lexer lex = new Lexer();
-        Parser parser = new Parser();
-        errors = new ArrayList<>();
-        Token[] tok;
-        if(str[0].length() == 0){
-            line();
-            return;
+    private boolean checkSyntax(String...code){
+        if(!lex.tokenization(code)){
+            this.errorList.addAll(lex.getTokens());
+            return false;
         }
-        //If line has error, then stop (return)
-        if(!lex.tokenization(str)){
-            System.out.println("Syntax Error: "+Arrays.toString(lex.getErrors()));
-            return;
+        return true;
+    }
+
+    private boolean checkSemantic(CharSequence...code){
+        if(!parser.parse((Vertex<?>[]) code)) {
+            this.errorList.addAll(parser.getReturnValueObjects());
+            return false;
         }
-        else if(lex.getTokens()[0].getType().equals(SYNTAX.OPCODE) && dictionary.contains(str[0])){
-            tok = (Token[]) parser.parse(lex.getTokens());
-            if(tok.length > 0){
-                for(Token x : tok){
-                    linestatement.add(new Node(dictionary.getAddress(x.getData()), x.getData()));
+        return true;
+    }
+
+    private boolean checkDictionary(CharSequence...code){
+        int cnt = 0;
+        BinaryAddress temp = null;
+        StringBuilder str = new StringBuilder();
+
+        for(CharSequence x : code){
+            cnt+=x.length();
+            if(Token.class.cast(x).getKey().equals(SYNTAX.LABEL)){
+                str.append(Token.class.cast(x).getValue()+" ");
+                if(code.length == 1){
+                    temp = new BinaryAddress(this.numberOfLine);
+                    break;
                 }
+            }   
+            if(Token.class.cast(x).getKey().equals(SYNTAX.OPCODE) && this.dictMap.containsKey(Token.class.cast(x).getValue()) )
+            {
+                temp = this.dictMap.get(Token.class.cast(x).getValue());
+                str.append(Token.class.cast(x).getValue()+" ");
             }
-            errors.addAll(Arrays.asList(parser.getErrors()));
         }
-        line();
+
+        if(temp != null){
+            this.linestatement.put(this.numberOfLine, new Node(temp, str.toString().strip()));
+            return true;
+        }
+        else{
+            this.errorList.add(this.numberOfLine, new Error<>(cnt, Arrays.toString(code)));
+            return false;
+        }
     }
 
-    public Node[] getLinestatement() {
-        return linestatement.toArray(new Node[0]);
+    public Map<Integer, Node> getLinestatement() {
+        return linestatement;
     }
 
-    public Token[] getErrors() {
-        return errors.toArray(new Token[0]);
+    public int getNumberOfLine() {
+        return numberOfLine;
+    }
+
+    public BinaryAddress getMemoryAddress() {
+        return memoryAddress;
+    }
+
+    public List<CharSequence> getErrorList() {
+        return errorList;
     }
 
 }

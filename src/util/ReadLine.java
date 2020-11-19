@@ -1,14 +1,7 @@
 package util;
 
-import java.io.Closeable;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Queue;
+import java.io.*;
+import java.util.*;
 
 public class ReadLine implements Closeable, Iterable<String[]> {
     private FileInputStream src;
@@ -18,6 +11,13 @@ public class ReadLine implements Closeable, Iterable<String[]> {
 
     public ReadLine(FileInputStream src, int n){
         this.src = src;
+        this.lineArray = new StringBuilder();
+        this.queueOfLines = new LinkedList<>();
+        this.numberOfElemenets = n;
+    }
+
+    public ReadLine(File src, int n) throws FileNotFoundException {
+        this.src = new FileInputStream(src);
         this.lineArray = new StringBuilder();
         this.queueOfLines = new LinkedList<>();
         this.numberOfElemenets = n;
@@ -36,7 +36,7 @@ public class ReadLine implements Closeable, Iterable<String[]> {
         this.numberOfElemenets = n;
     }
 
-    public String[] oneline() throws IOException {
+	public String[] oneline() throws IOException {
         this.lineArray.delete(0, this.lineArray.length());
         this.execute(src.read());
         String[] temp = this.lineArray.toString().replaceAll("\\s+", " ").strip().split(" ", this.numberOfElemenets);

@@ -1,26 +1,40 @@
 import util.*;
 import assembler.*;
+import assembler.tokenization.*;
+
 import java.io.IOException;
+import java.util.Map;
 
 public class Demo{
 
     public static void main(String[] args) {
-        TrinarySearchTree<String, String> tst = new TrinarySearchTree<>();
+        Map<String,BinaryAddress> dic = new BinarySearchTree<>();
 
-        try(ReadLine file = new ReadLine("dictionary.txt",3);
+        try(ReadLine file = new ReadLine("dictionary",3);
         ReadLine src = new ReadLine("input.asm",4))
         {
             for(String[] x : file){
-                tst.put(x[0], new BinaryAddress(x[1], false) , x.length > 2 ? x[2] : null);
+                dic.put(x[0], new BinaryAddress(x[1], false));
             }
 
-            Engine eng = new Engine(tst, src);
-            eng.line();
+            Engine eng = new Engine(dic, new Lexer(), new Parser());
+            
+            for(String[] x : src){
+                if(!eng.assemble(x))
+                    break;
+            }
 
-            System.out.println("Machine Code\tHex\tMnemonic");
+            System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
 
-            for(Node x : eng.getLinestatement())
-                System.out.println(x);
+            for(int i = 0; i < eng.getNumberOfLine() ; i++){
+                System.out.println((i+1)+"\t"+new BinaryAddress(i)+"\t"+
+                eng.getLinestatement().get(i));
+            }
+                        
+            System.out.println("Error "+eng.getErrorList().size());
+            for(CharSequence x : eng.getErrorList()){
+                System.out.println(x.toString());
+            }
         }
         catch(IOException e)
         {

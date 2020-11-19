@@ -1,57 +1,69 @@
 package assembler;
 
+import assembler.tokenization.SYNTAX;
+import assembler.tokenization.Token;
 
-public class Error<S extends Comparable<Integer>, V, T> {
-    private final int lineNumber;
-    private S position;
-    private V value;
-    private T type;
+public class Error<S extends Comparable<S>> implements Vertex<S> {
+    private static final long serialVersionUID = 42041950251807L;
+    private transient S position;
+    private Token value;
 
     /**
      * Incomplete
      * @param startLine
      */
-    public Error(int startLine, S position, V value, T type){
-        this.lineNumber = startLine;
+    public Error(S position, Token value){
         this.position = position;
         this.value = value;
-        this.type = type;
+    }
+    
+    public Error(S position, CharSequence value){
+        this.position = position;
+        this.value = new Token(null, value.toString());
     }
 
-    public int getLineNumber() {
-        return lineNumber;
+    public CharSequence getValue() {
+        return this.value.getValue();
     }
 
-    public V getValue() {
-        return value;
+    public SYNTAX getType() {
+        return this.value.getKey();
     }
 
-    public T getType() {
-        return type;
-    }
-
-    public S getPosition() {
+    public S getKey() {
         return position;
     }
 
-    public void set(S position, V value, T type){
-        this.position = position;
-        this.value = value;
-        this.type = type;
+    public boolean contain(SYNTAX type){
+        return this.value.getKey() == type;
     }
 
-    public boolean contain(T type){
-        return this.type == type;
-    }
-
-    public boolean equalsTo(Error<S, V, T> err){
-        return (this.lineNumber == err.lineNumber) && (this.position == err.position);
+    public boolean equalsTo(CharSequence err){
+        return this.value == err;
     }
 
 
+    @Override
+    public String toString(){
+        if(this.value instanceof Token)
+            return String.format("(%s:%s) %s", this.value.getKey() == null ? "Unknown": this.value.getKey(), this.position, this.value);
+        else
+            return String.format("%s:%s",this.position, this.value);
+    }
 
+    @Override
+    public char charAt(int arg0) {
+        return this.value.charAt(arg0);
+    }
 
+    @Override
+    public int length() {
+        return this.value.length();
+    }
 
-
+    @Override
+    public CharSequence subSequence(int arg0, int arg1) {
+        return this.value.subSequence(arg0, arg1);
+    }
 
 }

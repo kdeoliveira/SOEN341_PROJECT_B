@@ -1,8 +1,9 @@
 // cma.java - (c) 2020 by Team B6: Cm assembler
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import assembler.*;
+import assembler.tokenization.*;
+import java.util.*;
 
 import admin.*;
 import util.*;
@@ -14,6 +15,8 @@ public class cma {
 
         // Parsing options and arguments.
         admin.administer();
+
+        Map<String,BinaryAddress> dic = new BinarySearchTree<>();
 
         IOptionTable options = admin.getOptions();
 
@@ -36,15 +39,37 @@ public class cma {
             }
             if (verbose) admin.outputln("cma: Opening '" + filename + "'");
             
-            admin.output(filename + ": ");
-            
-            try(ReadLine rl = new ReadLine(filename, 3)){
+            // admin.output(filename + ": ");
 
-                for(String[] x : rl){
-                    System.out.println(Arrays.toString(x));
-                }            
-            } catch (IOException e) {
-            	e.printStackTrace();
+            try(ReadLine dictFile = new ReadLine("dictionary",3);
+            ReadLine src = new ReadLine(file,4))
+            {
+                for(String[] x : dictFile){
+                    dic.put(x[0], new BinaryAddress(x[1], false));
+                }
+    
+                Engine eng = new Engine(dic, new Lexer(), new Parser());
+                
+                for(String[] x : src){
+                    if(!eng.assemble(x))
+                        break;
+                }
+    
+                System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
+    
+                for(int i = 0; i < eng.getNumberOfLine() ; i++){
+                    System.out.println((i+1)+"\t"+new BinaryAddress(i)+"\t"+
+                    eng.getLinestatement().get(i));
+                }
+                            
+                System.out.println("Error "+eng.getErrorList().size());
+                for(CharSequence x : eng.getErrorList()){
+                    System.out.println(x.toString());
+                }
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
             }
             
             if (verbose) admin.outputln("cma: Closing '" + filename + "'");

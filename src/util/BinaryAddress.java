@@ -162,6 +162,18 @@ public class BinaryAddress {
         this.hexCode = this.convertHex(this.binaryAddress);
     }
 
+    /**
+ * Returns unisgned byte
+ * @param x
+ */
+    public void plus(int x){
+
+        if(this.binaryAddress + x > (int) Math.pow(2, this.format) - 1) return;
+
+        this.binaryAddress+=x;
+        this.hexCode = this.convertHex(this.binaryAddress);
+    }
+
     public BinaryAddress concat(BinaryAddress x){
         return new BinaryAddress(((this.binaryAddress << 4) + (x.binaryAddress & 0xff)), false, 16);
     }

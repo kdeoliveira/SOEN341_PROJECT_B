@@ -1,23 +1,24 @@
 package util;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
-public class TrinarySearchTree<K extends Comparable<K>, V> {
+public class BinarySearchTree<K extends Comparable<K>> implements Map<K, BinaryAddress> {
 
     private Node root; // root of BST
 
     private class Node {
         private K key; // sorted by key
         private BinaryAddress val; // associated data
-        private V value;
         private Node left;
         private Node right; // left and right subtrees
         private int size; // number of nodes in subtree
 
-        public Node(K key, BinaryAddress val, V value, int size) {
+        public Node(K key, BinaryAddress val, int size) {
             this.key = key;
             this.val = val;
-            this.value = value;
             this.size = size;
         }
     }
@@ -25,7 +26,7 @@ public class TrinarySearchTree<K extends Comparable<K>, V> {
     /**
      * Initializes an empty symbol table.
      */
-    public TrinarySearchTree() {
+    public BinarySearchTree() {
         // Empty
     }
 
@@ -47,10 +48,62 @@ public class TrinarySearchTree<K extends Comparable<K>, V> {
     public boolean contains(K key) {
         if (key == null)
             throw new IllegalArgumentException("argument to contains() is null");
-        return getAddress(key) != null;
+        return get(key) != null;
     }
 
-    public BinaryAddress getAddress(K key) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean containsKey(Object arg0) {
+        if (!(arg0 instanceof Comparable))
+            throw new IllegalArgumentException("argument to contains() is not of type Comparable");
+        return get((K) arg0) != null;
+    }
+
+    @Override
+    public boolean containsValue(Object arg0) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+
+    @Override
+    public Set<Entry<K, BinaryAddress>> entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+
+    @Override
+    public Set<K> keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void putAll(Map<? extends K, ? extends BinaryAddress> arg0) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<BinaryAddress> values() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public BinaryAddress get(Object arg0) {
+        if(arg0 instanceof Comparable)
+            return getAddress(root, (K) arg0);
+        else
+            return null;
+    }
+
+    public BinaryAddress get(K key) {
         return getAddress(root, key);
     }
 
@@ -68,45 +121,26 @@ public class TrinarySearchTree<K extends Comparable<K>, V> {
             return x.val;
     }
 
-    public V getValue(K key) {
-        return getValue(this.root, key);
-    }
-
-    private V getValue(Node x, K key) {
-        if (key == null)
-            throw new IllegalArgumentException("calls get() with a null key");
-        if (x == null)
-            return null;
-        int cmp = key.compareTo(x.key);
-        if (cmp < 0)
-            return getValue(x.left, key);
-        else if (cmp > 0)
-            return getValue(x.right, key);
-        else
-            return x.value;
-    }
-
-    public void put(K key, BinaryAddress val, V value) {
+    public BinaryAddress put(K key, BinaryAddress val) {
         if (key == null)
             throw new IllegalArgumentException("calls put() with a null key");
         if (val == null) {
             delete(key);
-            return;
         }
-        root = put(root, key, val, value);
+        root = put(root, key, val);
+        return root.val;
     }
 
-    private Node put(Node x, K key, BinaryAddress val, V value) {
+    private Node put(Node x, K key, BinaryAddress val) {
         if (x == null)
-            return new Node(key, val, value, 1);
+            return new Node(key, val, 1);
         int cmp = key.compareTo(x.key);
         if (cmp < 0)
-            x.left = put(x.left, key, val, value);
+            x.left = put(x.left, key, val);
         else if (cmp > 0)
-            x.right = put(x.right, key, val, value);
+            x.right = put(x.right, key, val);
         else {
             x.val = val;
-            x.value = value;
         }
         x.size = 1 + size(x.left) + size(x.right);
         return x;
@@ -138,6 +172,16 @@ public class TrinarySearchTree<K extends Comparable<K>, V> {
         x.right = deleteMax(x.right);
         x.size = size(x.left) + size(x.right) + 1;
         return x;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public BinaryAddress remove(Object arg0) {
+        if (arg0 instanceof Comparable)
+            root = delete(root, (K) arg0);
+        else
+            throw new IllegalArgumentException("calls delete() with a null key");
+        return null;
     }
 
     public void delete(K key) {
@@ -196,15 +240,16 @@ public class TrinarySearchTree<K extends Comparable<K>, V> {
     }
 
     public static void main(String[] args) {
-        TrinarySearchTree<String, String> instructions = new TrinarySearchTree<>();
+        Map<String,BinaryAddress> instructions = new BinarySearchTree<>();
+
         String[] a = { "ldv", "halt", "trap", "add" };
-        String[] comment = { "Load Variable", "Stop Machine", "Return exit", "Addition of constant" };
         int[] add = { 0x44, 0x33, 0x55, 0x40 };
 
         for (int i = 0; i < a.length; i++) {
-            instructions.put(a[i], new BinaryAddress(add[i], false), comment[i]);
+            instructions.put(a[i], new BinaryAddress(add[i]));
         }
 
-        System.out.println(instructions.getAddress("halt"));
+        System.out.println(instructions.get("add"));
     }
+
 }

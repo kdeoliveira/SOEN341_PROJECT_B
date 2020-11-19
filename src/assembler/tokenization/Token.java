@@ -1,25 +1,49 @@
 package assembler.tokenization;
 
-public class Token {
-    private final SYNTAX type;
-    private String data;
+import assembler.Vertex;
+
+/**
+ * Eventually change CharSequence implementation to another more preferrable
+ */
+public class Token implements Vertex<SYNTAX>{
+    private final SYNTAX key;
+    private static final long serialVersionUID = 760703066967345L;
+    private String value;
 
     public Token(SYNTAX type, String data){
-        this.type = type;
-        this.data = data;
+        this.key = type;
+        this.value = data;
     }
 
-    public SYNTAX getType() {
-        return this.type;
+    public SYNTAX getKey() {
+        return this.key;
     }
 
 
-    public String getData() {
-        return this.data;
+    public String getValue() {
+        return this.value;
     }
 
     @Override
     public String toString(){
-        return String.format("%s (%s)",this.data, this.type.name());
+        if(this.key != null)
+            return String.format("%s (%s)",this.value, this.key.name());
+        else
+            return this.value;
+    }
+
+    @Override
+    public char charAt(int arg0) {
+        return this.value.charAt(arg0);
+    }
+
+    @Override
+    public int length() {
+        return this.value.length();
+    }
+
+    @Override
+    public CharSequence subSequence(int arg0, int arg1) {
+        return this.value.subSequence(arg0, arg1);
     }
 }

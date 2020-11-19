@@ -6,10 +6,32 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - BinarySearchTree",
+            "request": "launch",
+            "mainClass": "util.BinarySearchTree",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Lexer",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Lexer",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Parser",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Parser",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - cma",
             "request": "launch",
             "mainClass": "cma",
-            "projectName": "src"
+            "projectName": "src",
+            "args": "input.asm"
         },
         {
             "type": "java",
