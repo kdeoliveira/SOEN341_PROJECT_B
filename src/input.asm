@@ -5,7 +5,7 @@
  ret
  not
  and
- or 
+ or
  xor
  neg
  inc
@@ -13,7 +13,7 @@
  add
  sub
  mul
- div.u8
+ div label 
  rem
  shl
  shr

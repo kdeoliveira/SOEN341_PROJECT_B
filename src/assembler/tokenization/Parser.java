@@ -1,66 +1,74 @@
 package assembler.tokenization;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
-public class Parser {
-    private ArrayList<SYNTAX> type;
-    private ArrayList<Token> errors;
-    private final SEMANTIC[] semantic;
+import assembler.Vertex;
+import assembler.Error;
+
+public class Parser{
+    private List<CharSequence> returnValueObjects;
+    private final EBNF[] semantic;
+    private String typeEBNF;
 
     public Parser(){
-        this.semantic = SEMANTIC.values();
-        this.type = new ArrayList<>();
-        this.errors = new ArrayList<>();
+        this.semantic = EBNF.values();
     }
 
-    public Object[] parse(Token...tokens){
-        boolean flag = false;
-        type = new ArrayList<>();
-        this.errors = new ArrayList<>();
+    public boolean parse(Vertex<?>...object){
+        if(object.length == 0 || !(object[0] instanceof Token))  return false;
+        returnValueObjects = new ArrayList<>();
+        List<SYNTAX> type = new ArrayList<>();
+        
+        for(Vertex<?> x : object)
+            type.add((SYNTAX) x.getKey());
 
-        if(tokens.length > 0)
-            for(Token x : tokens)
-                type.add(x.getType());
-        
-        
-        
+
+        if(this.internalParser(type.toArray(new SYNTAX[0])))
+        {
+            this.returnValueObjects.add(Arrays.toString(object));
+            return true;
+        }
+        else{
+            this.returnValueObjects.add(new Error<Integer>(1, Arrays.toString(object)));
+            return false;
+        }
+    }
+
+    private boolean internalParser(SYNTAX[] cmp){
         for(int i = 0 ; i < this.semantic.length ; i++)
         {
-            if(Arrays.equals(this.semantic[i].getType(), type.toArray(new SYNTAX[0])))
+            
+            if(Arrays.equals(this.semantic[i].getType(), cmp))
             {
-                flag = true;
+                this.typeEBNF = this.semantic[i].name();
+                return true;
             }
         }
-
-        if(flag)    return tokens;
-        else        {
-            errors.addAll(Arrays.asList(tokens));
-            return new Object[0];
-        }
-        
+        this.typeEBNF = null;
+        return false;
     }
 
-    public Object[] getType() {
-        return this.type.toArray(new SYNTAX[0]);
+    public List<CharSequence> getReturnValueObjects() {
+        return this.returnValueObjects;
     }
 
-    public Token[] getErrors() {
-        return errors.toArray(new Token[0]);
+    public String getTypeEBNF() {
+        return this.typeEBNF;
     }
 
     public static void main(String[] args){
         Lexer lex = new Lexer();
-        lex.tokenization("addu", "abel");
+        lex.tokenization("addu", "label");
 
-        Token[] tokens = lex.getTokens();
-
-        // System.out.println(Arrays.toString(lex.getTokens()));
+        Token[] tokens = lex.getTokens().toArray(new Token[0]);
 
         Parser parser = new Parser();
+
         parser.parse(tokens);
-        // System.out.println(Arrays.toString(parser.parse(tokens)));
-        System.out.println(Arrays.toString(parser.getErrors()));
+
+        
+        System.out.println(parser.getReturnValueObjects());
+        System.out.println(parser.getTypeEBNF());
     }
 
 

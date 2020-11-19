@@ -1,14 +1,7 @@
 package util;
 
-import java.io.Closeable;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Queue;
+import java.io.*;
+import java.util.*;
 
 public class ReadLine implements Closeable, Iterable<String[]> {
     private FileInputStream src;

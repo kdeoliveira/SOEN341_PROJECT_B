@@ -2,29 +2,45 @@ package assembler;
 
 import util.BinaryAddress;
 
-public class Node {
-    private BinaryAddress machineCode;
-    private String name;
+public class Node implements Vertex<String>{
+    private static final long serialVersionUID = 240542041950251807L;
+    private String key;
+    private transient BinaryAddress value;
 
     public Node(int hex, String name){
-        this.machineCode = new BinaryAddress(hex);
-        this.name = name;
+        this.value = new BinaryAddress(hex);
+        this.key = name;
     }
     public Node(BinaryAddress hex, String name){
-        this.machineCode = hex;
-        this.name = name;
+        this.key = name;
+        this.value = hex;
     }
 
-    public String getName() {
-        return name;
+    public String getKey() {
+        return this.key;
     }
 
-    public BinaryAddress getMachineCode() {
-        return machineCode;
+    public BinaryAddress getValue() {
+        return this.value;
     }
 
     @Override
     public String toString(){
-        return String.format("%s\t%s\t%s", machineCode, machineCode.getHexCode(), name);
+        return String.format("%s\t%s\t%s", value, value.getHexCode(), key);
+    }
+
+    @Override
+    public char charAt(int arg0) {
+        return this.key.charAt(arg0);
+    }
+
+    @Override
+    public int length() {
+        return this.key.length();
+    }
+
+    @Override
+    public CharSequence subSequence(int arg0, int arg1) {
+        return this.key.subSequence(arg0, arg1);
     }
 }
