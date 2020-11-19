@@ -49,7 +49,10 @@ public class Engine {
 
     private boolean checkSemantic(CharSequence...code){
         if(!parser.parse((Vertex<?>[]) code)) {
-            this.errorList.addAll(parser.getReturnValueObjects());
+            if(parser.getReturnValueObjects() == null)
+                this.errorList.add(new Error<Integer>(0, "Incorrect format"));
+            else
+                this.errorList.addAll(parser.getReturnValueObjects());
             return false;
         }
         return true;

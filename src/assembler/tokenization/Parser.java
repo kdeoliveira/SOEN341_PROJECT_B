@@ -22,7 +22,6 @@ public class Parser{
         for(Vertex<?> x : object)
             type.add((SYNTAX) x.getKey());
 
-
         if(this.internalParser(type.toArray(new SYNTAX[0])))
         {
             this.returnValueObjects.add(Arrays.toString(object));
@@ -58,9 +57,9 @@ public class Parser{
 
     public static void main(String[] args){
         Lexer lex = new Lexer();
-        lex.tokenization("Label");
+        System.out.println(lex.tokenization("","add"));
 
-        Token[] tokens = lex.getTokens().toArray(new Token[0]);
+        Vertex<?>[] tokens = lex.getTokens().toArray(new Vertex<?>[0]);
 
         System.out.println(lex.getTokens());
 
@@ -72,7 +71,7 @@ public class Parser{
         System.out.println(parser.getReturnValueObjects());
         System.out.println(parser.getTypeEBNF());
 
-        
+
         /**
          * Expected result of main:
 [Label (LABEL)]

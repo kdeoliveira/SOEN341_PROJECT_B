@@ -123,7 +123,7 @@ public class ReadLine implements Closeable, Iterable<String[]> {
     public static void main(String[] args){
 
         try(ReadLine rl = new ReadLine("input.asm", 3)){
-            rl.setRegex("(?<=\\s\\S+)\\s");
+            // rl.setRegex("(?<=\\s\\S+)\\s");
             for(String[] x : rl){
                 System.out.println(Arrays.toString(x));
             }

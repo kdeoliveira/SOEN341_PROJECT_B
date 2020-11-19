@@ -2,8 +2,8 @@ package assembler.tokenization;
 
 
 public enum SYNTAX{
-    OPCODE("[\\s]([a-z])+(\\.[ui](3|5|8)$)?"),
-    LABEL("^(?! )\\p{Upper}\\p{Lower}+"),
+    OPCODE("([a-z])+(\\.[ui](3|5|8)$)?"),
+    LABEL("\\p{Upper}\\p{Lower}+"),
     OPERAND("\\d+"),
     COMMENT("[;].+");
 

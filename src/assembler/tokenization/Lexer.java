@@ -29,13 +29,18 @@ public class Lexer{
         this.tokenPosition = 0;
         this.tokenLength = 0;
 
+        
+
         // Add if tokenLength and tokenPosition are initialized in constructor
         // if(this.tokenLength == 0)    this.tokenLength += input.length - 1;
         // else                        this.tokenLength += input.length;
-
-        if(input.length == 0 || input[0].equals(""))       return true;
-        for(CharSequence x : input)
-            this.tokenLength += internalTokenization(this.pattern.matcher(x), x.toString());
+        
+        // if(input.length == 0 || input[0].equals(""))       return true;
+        int cnt = 0;
+        for(CharSequence x : input){
+            this.tokenLength += internalTokenization(this.pattern.matcher(x), x.toString(), cnt);
+            cnt++;
+        }
 
         if (this.tokenPosition == 0){
             return true;
@@ -47,27 +52,35 @@ public class Lexer{
 
     }
 
-    private int internalTokenization(Matcher matcher, String in){
+    private int internalTokenization(Matcher matcher, String in, int cnt){
+        if(in.isEmpty())    return 0;
+
         if(matcher.find() && matcher.end() == in.length()){
             for(SYNTAX x : SYNTAX.values())
             {
                 if(matcher.group(x.name()) != null){
+                    if((cnt == 0 && x == SYNTAX.OPCODE) || (cnt == 1 && x == SYNTAX.LABEL)){
+                        this.generateError(matcher, in);                        
+                        return in.length();
+                    }
                     tokens.add(new Token(x, matcher.group(x.name()).strip()));
                 }
             }            
         }else{
-            try{
-                this.tokenPosition = matcher.end() + this.tokenLength;
-                
-                this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,in.substring(0, matcher.end())+"["+in.substring(matcher.end())+"]")));
-            }catch(IllegalStateException e){
-                this.tokenPosition = this.tokenLength + 1;
-                
-                this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,"["+in+"]")));
-            }
+            this.generateError(matcher, in);
         }        
 
         return in.length();
+    }
+
+    private void generateError(Matcher matcher, String input){
+        try{
+            this.tokenPosition = matcher.end() + this.tokenLength;
+            this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,input.substring(0, matcher.end())+"["+input.substring(matcher.end())+"]")));
+        }catch(IllegalStateException e){
+            this.tokenPosition = this.tokenLength + 1;
+            this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,"["+input+"]")));
+        }
     }
     
 
@@ -95,13 +108,7 @@ public class Lexer{
 
     public static void main(String[] args){
             Lexer lex = new Lexer();
-            lex.tokenization(" Label", " add", ";kfsfsd");
-            System.out.println((lex.getTokens()));
-            System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
-            lex.tokenization("Label", " add", ";kfsfsd");
-            System.out.println((lex.getTokens()));
-            System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
-            lex.tokenization("Label", "add", ";kfsfsd");
+            System.out.println(lex.tokenization("", " Label", ";kfsfsd"));
             System.out.println((lex.getTokens()));
             System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
 
