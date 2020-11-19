@@ -62,6 +62,8 @@ public class Parser{
 
         Token[] tokens = lex.getTokens().toArray(new Token[0]);
 
+        System.out.println(lex.getTokens());
+
         Parser parser = new Parser();
 
         parser.parse(tokens);

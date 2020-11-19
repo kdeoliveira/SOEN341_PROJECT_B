@@ -13,6 +13,9 @@ public class Demo{
         try(ReadLine file = new ReadLine("dictionary",3);
         ReadLine src = new ReadLine("input.asm",4))
         {
+
+            src.setRegex("(?<=\\s\\S+)\\s");
+
             for(String[] x : file){
                 dic.put(x[0], new BinaryAddress(x[1], false));
             }

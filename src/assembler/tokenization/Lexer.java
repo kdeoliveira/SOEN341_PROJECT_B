@@ -1,10 +1,12 @@
 package assembler.tokenization;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.*;
 
 import assembler.Error;
+import util.BinaryAddress;
+import util.BinarySearchTree;
+import util.ReadLine;
 
 public class Lexer{
     private List<CharSequence> tokens;
@@ -50,13 +52,19 @@ public class Lexer{
             for(SYNTAX x : SYNTAX.values())
             {
                 if(matcher.group(x.name()) != null){
-                    tokens.add(new Token(x, matcher.group(x.name())));
+                    tokens.add(new Token(x, matcher.group(x.name()).strip()));
                 }
             }            
         }else{
-            this.tokenPosition = matcher.end() + this.tokenLength;
-            
-            this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,in.substring(0, matcher.end())+"["+in.substring(matcher.end())+"]")));
+            try{
+                this.tokenPosition = matcher.end() + this.tokenLength;
+                
+                this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,in.substring(0, matcher.end())+"["+in.substring(matcher.end())+"]")));
+            }catch(IllegalStateException e){
+                this.tokenPosition = this.tokenLength + 1;
+                
+                this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,"["+in+"]")));
+            }
         }        
 
         return in.length();
@@ -86,10 +94,15 @@ public class Lexer{
     // }
 
     public static void main(String[] args){
-        Lexer lex = new Lexer();
-        lex.tokenization("add.u8");
-        lex.tokenization("La8bel", "add.u3", ";kfsfsd");
-        System.out.println((lex.getTokens()));
-        System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
+            Lexer lex = new Lexer();
+            lex.tokenization(" Label", " add", ";kfsfsd");
+            System.out.println((lex.getTokens()));
+            System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
+            lex.tokenization("Label", " add", ";kfsfsd");
+            System.out.println((lex.getTokens()));
+            System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
+            lex.tokenization("Label", "add", ";kfsfsd");
+            System.out.println((lex.getTokens()));
+            System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
     }
 }

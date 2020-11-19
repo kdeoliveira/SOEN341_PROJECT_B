@@ -8,7 +8,8 @@ public class ReadLine implements Closeable, Iterable<String[]> {
     private StringBuilder lineArray;
     private Queue<String[]> queueOfLines;
     private int numberOfElemenets;
-
+    private String regex = " ";
+    
     public ReadLine(FileInputStream src, int n){
         this.src = src;
         this.lineArray = new StringBuilder();
@@ -36,10 +37,27 @@ public class ReadLine implements Closeable, Iterable<String[]> {
         this.numberOfElemenets = n;
     }
 
-	public String[] oneline() throws IOException {
+    public ReadLine(String src, int n, String regex){
+        try {
+            this.src = new FileInputStream(src);
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.lineArray = new StringBuilder();
+        this.queueOfLines = new LinkedList<>();
+        this.numberOfElemenets = n;
+        this.regex = regex;
+    }
+
+    public void setRegex(String regex) {
+        this.regex = regex;
+    }
+
+    public String[] oneline() throws IOException {
         this.lineArray.delete(0, this.lineArray.length());
         this.execute(src.read());
-        String[] temp = this.lineArray.toString().replaceAll("\\s+", " ").strip().split(" ", this.numberOfElemenets);
+        String[] temp = this.lineArray.toString().replaceAll("\\s+", " ").stripTrailing().split(this.regex, this.numberOfElemenets);
 
         if(temp.length < 1)     return new String[0];
         queueOfLines.add(temp);
@@ -105,7 +123,7 @@ public class ReadLine implements Closeable, Iterable<String[]> {
     public static void main(String[] args){
 
         try(ReadLine rl = new ReadLine("input.asm", 3)){
-
+            rl.setRegex("(?<=\\s\\S+)\\s");
             for(String[] x : rl){
                 System.out.println(Arrays.toString(x));
             }

@@ -31,8 +31,8 @@ public class Engine {
         if(code.length == 0)    return false;
         
         if(!this.checkSyntax(code) || 
-        !this.checkSemantic(lex.getTokens().toArray(new Token[0])) || 
-        !this.checkDictionary(lex.getTokens().toArray(new Token[0]))) return false;
+        !this.checkSemantic(lex.getTokens().toArray(new Vertex<?>[0])) || 
+        !this.checkDictionary(lex.getTokens().toArray(new Vertex<?>[0]))) return false;
         
         this.numberOfLine++;
         this.memoryAddress.plus(0x1);
