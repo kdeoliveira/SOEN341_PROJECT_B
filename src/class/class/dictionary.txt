@@ -1,0 +1,25 @@
+halt    0x00 Stop virtual machine 
+pop     0x01 Remove top of stack  
+dup     0x02 Duplicate top of stack 
+exit    0x03 Return from function with parameters
+ret     0x04 Return from function
+not     0x0C Bitwise one’s complement
+and     0x0D Bitwise AND
+or      0x0E Bitwise OR
+xor     0x0F Bitwise XOR
+neg     0x10 Negate
+inc     0x11 Increment
+dec     0x12 Decrement
+add     0x13 Addition
+sub     0x14 Subtraction
+mul     0x15 Multiplication
+div     0x16 Division
+rem     0x17 Remainder, modulo
+shl     0x18 Shift left
+shr     0x19 Shift right
+teq     0x1A Test for equal
+tne     0x1B Test for not equal
+tlt     0x1C Test for less than
+tgt     0x1D Test for greater than
+tle     0x1E Test for less or equal
+tge     0x1F Test for greater or equal
