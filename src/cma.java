@@ -49,6 +49,8 @@ public class cma {
                 }
     
                 Engine eng = new Engine(dic, new Lexer(), new Parser());
+
+                src.setRegex("(?<=\\s\\S+)\\s");
                 
                 for(String[] x : src){
                     if(!eng.assemble(x))

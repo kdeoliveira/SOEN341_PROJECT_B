@@ -71,6 +71,14 @@ public class Parser{
         
         System.out.println(parser.getReturnValueObjects());
         System.out.println(parser.getTypeEBNF());
+
+        
+        /**
+         * Expected result of main:
+[Label (LABEL)]
+[[Label (LABEL)]]
+LABEL
+         */
     }
 
 

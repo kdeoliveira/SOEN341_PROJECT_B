@@ -136,5 +136,35 @@ public class ReadLine implements Closeable, Iterable<String[]> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        /**
+         * Expected result of main:
+        [ halt]
+        [ pop]
+        [ dup]
+        [ exit]
+        [ ret]
+        [ not, Label]
+        [ and]
+        [ Label]
+        [ xor]
+        [ neg]
+        [ inc]
+        [ dec]
+        [ add]
+        [ sub]
+        [ mul]
+        [ div]
+        [ rem]
+        [ shl]
+        [ shr]
+        [ teq]
+        [ tne]
+        [ tlt]
+        [ tgt]
+        [ tle]
+        [ tge]
+        [ halt]
+         */
     }
 }

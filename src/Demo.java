@@ -43,5 +43,20 @@ public class Demo{
         {
             e.printStackTrace();
         }
+
+
+        /**
+         * Expected result of Demo.java:
+#       Memory Address  Machine Code    Hex     Mnemonic
+1       00000000        00000000        00      halt
+2       00000001        00000001        01      pop
+3       00000010        00000010        02      dup
+4       00000011        00000011        03      exit
+5       00000100        00000100        04      ret
+6       00000101        00001100        0C      not Label
+7       00000110        00001101        0D      and
+Error 1
+(Unknown:1) [ Label]
+         */
     }
 }
