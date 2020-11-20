@@ -60,8 +60,8 @@ public class cma {
                 System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
     
                 for(int i = 0; i < eng.getNumberOfLine() ; i++){
-                    System.out.println((i+1)+"\t"+new BinaryAddress(i)+"\t"+
-                    eng.getLinestatement().get(i));
+                    System.out.println(eng.getLines().get(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
+                    eng.getLines().get(i));
                 }
                             
                 System.out.println("Error "+eng.getErrorList().size());

@@ -22,6 +22,9 @@ public class Parser implements Parsable{
         for(Vertex<?> x : object)
             type.add((SYNTAX) x.getKey());
 
+        if(type.size() > 1)
+            type.removeIf(n -> n == SYNTAX.COMMENT);
+
         if(this.internalParser(type.toArray(new SYNTAX[0])))
         {
             this.returnValueObjects.add(Arrays.toString(object));
@@ -57,7 +60,7 @@ public class Parser implements Parsable{
 
     public static void main(String[] args){
         Lexer lex = new Lexer();
-        System.out.println(lex.tokenization("","add"));
+        System.out.println(lex.tokenization("","add",";add something"));
 
         Vertex<?>[] tokens = lex.getTokens().toArray(new Vertex<?>[0]);
 

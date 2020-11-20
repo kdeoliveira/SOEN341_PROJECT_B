@@ -5,16 +5,17 @@
  ret
  not Label
  and
-Label
- xor
- neg
+Label ;kevinfen
+ xor ;sfsdfsdfs
+ neg ;sdfsdfds
  inc
  dec
  add
  sub
  mul
  div 
- rem
+ ;dsfsdfdf
+ rem ;add something
  shl
  shr
  teq

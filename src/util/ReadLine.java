@@ -57,11 +57,19 @@ public class ReadLine implements Closeable, Iterable<String[]> {
     public String[] oneline() throws IOException {
         this.lineArray.delete(0, this.lineArray.length());
         this.execute(src.read());
-        String[] temp = this.lineArray.toString().replaceAll("\\s+", " ").stripTrailing().split(this.regex, this.numberOfElemenets);
+        // String[] temp = this.lineArray.toString().replaceAll("\\s+", " ").stripTrailing().split(this.regex, this.numberOfElemenets);
+        List<String> str = new ArrayList<>();
+        int ch = this.lineArray.indexOf(";");
+        if(ch == -1)
+            str.addAll(Arrays.asList(this.lineArray.toString().replaceAll("\\s+", " ").stripTrailing().split(this.regex, this.numberOfElemenets)));
+        else{
+            str.addAll(Arrays.asList(this.lineArray.substring(0, ch).replaceAll("\\s+", " ").stripTrailing().split(this.regex, this.numberOfElemenets)));
+            str.add(this.lineArray.substring(ch, this.lineArray.length()).strip());
+        }
 
-        if(temp.length < 1)     return new String[0];
-        queueOfLines.add(temp);
-        return temp;
+        if(str.isEmpty())     return new String[0];
+        queueOfLines.add(str.toArray(new String[0]));
+        return str.toArray(new String[0]);
     }
 
     public boolean isEmpty() throws IOException {
@@ -122,8 +130,8 @@ public class ReadLine implements Closeable, Iterable<String[]> {
 
     public static void main(String[] args){
 
-        try(ReadLine rl = new ReadLine("input.asm", 3)){
-            // rl.setRegex("(?<=\\s\\S+)\\s");
+        try(ReadLine rl = new ReadLine("input.asm", 4)){
+            // rl.setRegex("\\s(?=;)|\\s(?!.[\\w\\W\\s]+)|^\\s{1}");
             for(String[] x : rl){
                 System.out.println(Arrays.toString(x));
             }

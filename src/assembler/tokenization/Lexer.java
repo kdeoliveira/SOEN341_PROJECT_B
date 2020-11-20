@@ -25,11 +25,6 @@ public class Lexer implements Lexical{
         this.tokens = new ArrayList<>();
         this.tokenPosition = 0;
         this.tokenLength = 0;
-        // Add if tokenLength and tokenPosition are initialized in constructor
-        // if(this.tokenLength == 0)    this.tokenLength += input.length - 1;
-        // else                        this.tokenLength += input.length;
-        
-        // if(input.length == 0 || input[0].equals(""))       return true;
         int cnt = 0;
         for(CharSequence x : input){
             if(!x.toString().isEmpty())

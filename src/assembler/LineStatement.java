@@ -6,19 +6,25 @@ public class LineStatement {
 
 	private Node label;
 	private Node instruction;
-	private Node comment;
+	private Comment comment;
 	private int lineNumber;
 	private BinaryAddress machineCode;
 	private String typeEBNF;
 
 	
-	public LineStatement (int lineNumber, Node label, Node instruction, Node comment)
+	public LineStatement (int lineNumber, Node label, Node instruction, Comment comment, String type)
 	{	
 		this.lineNumber = lineNumber;
 		this.label = label;
 		this.instruction = instruction;
-		this.machineCode = (this.instruction != null) ? this.instruction.getValue() : this.label.getValue();
+		if(this.instruction == null && this.label != null)
+			this.machineCode = this.label.getValue();
+		else if(this.instruction == null)
+			this.machineCode = new BinaryAddress(0x0);
+		else
+			this.machineCode = this.instruction.getValue();
 		this.comment = comment;
+		this.typeEBNF = type;
 	}
 	public LineStatement ()
 	{
@@ -32,12 +38,16 @@ public class LineStatement {
 	public int getLineNumber() {
 		return lineNumber;
 	}
+	public String getTypeEBNF() {
+		return typeEBNF;
+	}
 	public Node getLabel() {
 		return label;
 	}
 	public void setLabel(Node label) {
 		this.label = label;
 	}
+
 	// public Node getopcode() {
 	// 	return opcode;
 	// }
@@ -50,21 +60,24 @@ public class LineStatement {
 	// public void setOperand(Node operand) {
 	// 	this.operand = operand;
 	// }
-	public Node getComment() {
-		return comment;
+	public String getComment() {
+		return comment.toString();
 	}
-	public void setComment(Node comment) {
-		this.comment = comment;
+	public void setComment(String comment) {
+		this.comment.setComment(comment);
 	}
 
 	@Override
 	public String toString() {
+		StringBuilder str = new StringBuilder();
 		if(this.label != null && this.instruction != null)
-			return String.format("%s\t%s\t\t%s\s%s", this.machineCode, this.machineCode.getHexCode(), this.instruction.getKey(), this.label.getKey());
+			str.append(String.format("%s\t%s\t\t%s\s%s", this.machineCode, this.machineCode.getHexCode(), this.instruction.getKey(), this.label.getKey()));
 		else if(this.instruction == null && this.label != null)
-			return String.format("%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.label.getKey());
+			str.append(String.format("%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.label.getKey()));
 		else
-			return String.format("%s\t%s\t\t%s", this.machineCode, this.machineCode.getHexCode(), this.instruction.getKey());
+			str.append(String.format("%s\t%s\t\t%s", this.machineCode, this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction.getKey()));
+		
+		return str.append(this.comment == null ? "" : "\t"+this.comment).toString();
 	}
 	
 

@@ -14,16 +14,18 @@ public class Demo{
         ReadLine src = new ReadLine("input.asm",4))
         {
 
+            // src.setRegex("\\s(?=;)|\\s(?!.[\\w\\W\\s]+)|^\\s{1}");
+
             for(String[] x : file){
                 dic.put(x[0], new BinaryAddress(x[1], false));
             }
 
             Engine eng = new Engine(dic, new Lexer(), new Parser());
             
-            for(String[] x : src){
+            for(String[] x : src)
                 if(!eng.assemble(x))
                     break;
-            }
+            
 
             System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel\tMnemonic");
             System.out.println();

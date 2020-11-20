@@ -13,8 +13,16 @@ public class Instruction extends Node{
 
 
     //Inherent Instructions only
-    public Instruction(BinaryAddress bin, String name){
+    public Instruction(BinaryAddress bin, String name, String type){
         super(bin, name);
+        this.typeEBNF = type;
+    }
+
+    public void setOpcode(Node opcode) {
+        this.opcode = opcode;
+    }
+    public void setOperand(Node operand) {
+        this.operand = operand;
     }
 
     public String getTypeEBNF() {
