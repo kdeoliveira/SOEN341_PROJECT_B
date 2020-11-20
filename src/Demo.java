@@ -14,8 +14,6 @@ public class Demo{
         ReadLine src = new ReadLine("input.asm",4))
         {
 
-            // src.setRegex("(?<=\\s\\S+)\\s");
-
             for(String[] x : file){
                 dic.put(x[0], new BinaryAddress(x[1], false));
             }
@@ -27,11 +25,12 @@ public class Demo{
                     break;
             }
 
-            System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
+            System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel\tMnemonic");
+            System.out.println();
 
             for(int i = 0; i < eng.getNumberOfLine() ; i++){
-                System.out.println((i+1)+"\t"+new BinaryAddress(i)+"\t"+
-                eng.getLinestatement().get(i));
+                System.out.println(eng.getLines().get(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
+                eng.getLines().get(i));
             }
                         
             System.out.println("Error "+eng.getErrorList().size());

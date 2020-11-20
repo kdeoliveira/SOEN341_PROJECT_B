@@ -4,11 +4,8 @@ import java.util.*;
 import java.util.regex.*;
 
 import assembler.Error;
-import util.BinaryAddress;
-import util.BinarySearchTree;
-import util.ReadLine;
 
-public class Lexer{
+public class Lexer implements Lexical{
     private List<CharSequence> tokens;
     private int tokenPosition;          // Character position start from 1 to String.length()
     private int tokenLength;
@@ -28,9 +25,6 @@ public class Lexer{
         this.tokens = new ArrayList<>();
         this.tokenPosition = 0;
         this.tokenLength = 0;
-
-        
-
         // Add if tokenLength and tokenPosition are initialized in constructor
         // if(this.tokenLength == 0)    this.tokenLength += input.length - 1;
         // else                        this.tokenLength += input.length;

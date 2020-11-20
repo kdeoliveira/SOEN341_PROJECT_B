@@ -31,7 +31,7 @@
             "request": "launch",
             "mainClass": "cma",
             "projectName": "src",
-            "args": "input.asm"
+            "args": "-v input.asm"
         },
         {
             "type": "java",

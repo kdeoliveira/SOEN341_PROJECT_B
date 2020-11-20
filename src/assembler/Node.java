@@ -24,6 +24,10 @@ public class Node implements Vertex<String>{
         return this.value;
     }
 
+    public void setValue(BinaryAddress value) {
+        this.value = value;
+    }
+
     @Override
     public String toString(){
         return String.format("%s\t%s\t%s", this.value, value.getHexCode(), key);

@@ -5,7 +5,7 @@ import java.util.*;
 import assembler.Vertex;
 import assembler.Error;
 
-public class Parser{
+public class Parser implements Parsable{
     private List<CharSequence> returnValueObjects;
     private final EBNF[] semantic;
     private String typeEBNF;
