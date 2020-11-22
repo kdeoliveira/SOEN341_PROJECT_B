@@ -8,6 +8,7 @@ import util.*;
 public class Engine {
     private Map<String,BinaryAddress> dictMap;
     private List<LineStatement> lines;
+    private List<Node> labels;
     private List<CharSequence> errorList;
     private int numberOfLine;
     private BinaryAddress memoryAddress;
@@ -19,6 +20,7 @@ public class Engine {
 
         this.memoryAddress = new BinaryAddress(0x0);
         this.lines = new ArrayList<>();
+        this.labels = new ArrayList<>();
         this.errorList = new ArrayList<>();
         this.numberOfLine = 0;
         this.lex = lexer;
@@ -64,24 +66,28 @@ public class Engine {
         Node label = null;
         Comment comment = null;
 
-        for(CharSequence x : code){
-            cnt+=x.length();
-            if(Token.class.cast(x).getKey().equals(SYNTAX.COMMENT)){
-                comment = new Comment(Token.class.cast(x).getValue());
-                flag =true;
-            }
-            if(Token.class.cast(x).getKey().equals(SYNTAX.LABEL)){
-                label = new Node(0, Token.class.cast(x).getValue());
-                if(code.length == 1){
+        for(int i = 0; i < code.length ; i++){
+            cnt+=code[i].length();
+            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.LABEL)){
+                label = new Node(0, Token.class.cast(code[i]).getValue());
+                if(i == 0){
                     flag = true;
                     label.setValue(new BinaryAddress(this.numberOfLine));
-                    break;
+                    this.labels.add(label);
                 }
             }   
-            if(Token.class.cast(x).getKey().equals(SYNTAX.OPCODE) && this.dictMap.containsKey(Token.class.cast(x).getValue()) )
+            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.COMMENT)){
+                comment = new Comment(Token.class.cast(code[i]).getValue());
+                flag =true;
+            }
+            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.OPCODE) && this.dictMap.containsKey(Token.class.cast(code[i]).getValue()) )
             {
                 flag = true;
-                inst = new Instruction(this.dictMap.get(Token.class.cast(x).getValue()), Token.class.cast(x).getValue(), this.parser.getTypeEBNF());
+                inst = new Instruction(this.dictMap.get(Token.class.cast(code[i]).getValue()), Token.class.cast(code[i]).getValue(), this.parser.getTypeEBNF());
+            }
+            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.OPERAND) && inst != null){
+                flag = true;
+                inst.setOperand(new Operand(new BinaryAddress(Token.class.cast(code[i]).getValue(), false), Token.class.cast(code[i]).getValue()));
             }
         }
 
@@ -90,7 +96,7 @@ public class Engine {
             return true;
         }
         else{
-            this.errorList.add(this.numberOfLine+1, new Error<>(cnt, Arrays.toString(code)));
+            this.errorList.add(new Error<>(cnt, Arrays.toString(code)));
             return false;
         }
     }
@@ -101,6 +107,10 @@ public class Engine {
 
     public int getNumberOfLine() {
         return numberOfLine;
+    }
+
+    public List<Node> getLabels() {
+        return labels;
     }
 
     public BinaryAddress getMemoryAddress() {

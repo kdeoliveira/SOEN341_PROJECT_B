@@ -13,9 +13,6 @@ public class Demo{
         try(ReadLine file = new ReadLine("dictionary",3);
         ReadLine src = new ReadLine("input.asm",4))
         {
-
-            // src.setRegex("\\s(?=;)|\\s(?!.[\\w\\W\\s]+)|^\\s{1}");
-
             for(String[] x : file){
                 dic.put(x[0], new BinaryAddress(x[1], false));
             }
@@ -28,14 +25,19 @@ public class Demo{
             
 
             System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel\tMnemonic");
-            System.out.println();
-
             for(int i = 0; i < eng.getNumberOfLine() ; i++){
                 System.out.println(eng.getLines().get(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
                 eng.getLines().get(i));
             }
+
+            System.out.println("Label List #"+eng.getLabels().size());
+            System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel");
+            for(int i = 0; i < eng.getLabels().size() ; i++){
+                System.out.println(i+1+"\t"+eng.getLabels().get(i).getValue()+"\t"+
+                eng.getLabels().get(i));
+            }
                         
-            System.out.println("Error "+eng.getErrorList().size());
+            System.out.println("Error #"+eng.getErrorList().size());
             for(CharSequence x : eng.getErrorList()){
                 System.out.println(x.toString());
             }

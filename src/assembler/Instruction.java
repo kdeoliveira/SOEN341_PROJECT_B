@@ -15,11 +15,13 @@ public class Instruction extends Node{
     //Inherent Instructions only
     public Instruction(BinaryAddress bin, String name, String type){
         super(bin, name);
+        this.opcode = new Node(bin, name);
         this.typeEBNF = type;
     }
 
     public void setOpcode(Node opcode) {
         this.opcode = opcode;
+        
     }
     public void setOperand(Node operand) {
         this.operand = operand;
@@ -27,6 +29,11 @@ public class Instruction extends Node{
 
     public String getTypeEBNF() {
         return typeEBNF;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s", this.opcode != null ? this.opcode.getKey() : "", this.operand != null ? this.operand.getKey() : "");
     }
 
     public void setInstruction(Node opcode){

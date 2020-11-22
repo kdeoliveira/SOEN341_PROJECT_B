@@ -9,6 +9,36 @@ import admin.*;
 import util.*;
 
 public class cma {
+
+    public static void printLines(Engine eng){
+        System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
+        for(int i = 0; i < eng.getNumberOfLine() ; i++){
+            System.out.println(eng.getLines().get(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
+            eng.getLines().get(i));
+        }
+    }
+    public static void printSymbols(Engine eng){
+        System.out.println("Label List #"+eng.getLabels().size());
+        System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel");
+        for(int i = 0; i < eng.getLabels().size() ; i++){
+            System.out.println(i+1+"\t"+eng.getLabels().get(i).getValue()+"\t"+
+            eng.getLabels().get(i));
+        }
+    }
+    public static void printErrors(Engine eng){
+        System.out.println("Error "+eng.getErrorList().size());
+        for(CharSequence x : eng.getErrorList()){
+            System.out.println(x.toString());
+        }
+    }
+    public static void printBinaryCode(Engine eng){
+        System.out.println("Binary Code");
+        for(int i = 0; i < eng.getNumberOfLine() ; i++){
+            System.out.print(eng.getLines().get(i).getMachineCode());
+        }
+        System.out.println();
+    }
+
     public static void main(String args[]) throws IOException {
         IListing       cmaListing  = cmaFactory.makeListing();
         IAdministrator admin       = cmaFactory.makeAdmin(args);
@@ -42,7 +72,11 @@ public class cma {
             // admin.output(filename + ": ");
 
             try(ReadLine dictFile = new ReadLine("dictionary",3);
-            ReadLine src = new ReadLine(file,4))
+            ReadLine src = new ReadLine(file,4);
+            PrintStream stream = new PrintStream(new File("output.lst"));
+            PrintStream symbols = new PrintStream(new File("symbols.lst"));
+            PrintStream errors = new PrintStream(new File("errors.lst"))
+            )
             {
                 for(String[] x : dictFile){
                     dic.put(x[0], new BinaryAddress(x[1], false));
@@ -56,25 +90,33 @@ public class cma {
                     if(!eng.assemble(x))
                         break;
                 }
-    
-                System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
-    
-                for(int i = 0; i < eng.getNumberOfLine() ; i++){
-                    System.out.println(eng.getLines().get(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
-                    eng.getLines().get(i));
+
+                printBinaryCode(eng);
+                System.out.println();
+                if (verbose){
+                    System.setOut(System.out);
+                    printLines(eng);
+                    printSymbols(eng);
+                    printErrors(eng);
+                    admin.outputln("cma: Closing '" + filename + "'");  
                 }
-                            
-                System.out.println("Error "+eng.getErrorList().size());
-                for(CharSequence x : eng.getErrorList()){
-                    System.out.println(x.toString());
-                }
+                
+                System.setOut(stream);
+                printLines(eng);
+                
+                System.setOut(symbols);
+                printSymbols(eng);
+
+                System.setOut(errors);            
+                printErrors(eng);
+                
             }
             catch(IOException e)
             {
                 e.printStackTrace();
             }
             
-            if (verbose) admin.outputln("cma: Closing '" + filename + "'");
+            
         }            
         admin.outputln("");
     }

@@ -1,22 +1,22 @@
 package assembler;
 
+import assembler.tokenization.EBNF;
 import util.BinaryAddress;
 
 public class LineStatement {
 
 	private Node label;
-	private Node instruction;
+	private Instruction instruction;
 	private Comment comment;
 	private int lineNumber;
 	private BinaryAddress machineCode;
 	private String typeEBNF;
 
-	
 	public LineStatement (int lineNumber, Node label, Node instruction, Comment comment, String type)
 	{	
 		this.lineNumber = lineNumber;
 		this.label = label;
-		this.instruction = instruction;
+		this.instruction = (Instruction) instruction;
 		if(this.instruction == null && this.label != null)
 			this.machineCode = this.label.getValue();
 		else if(this.instruction == null)
@@ -70,16 +70,18 @@ public class LineStatement {
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		if(this.label != null && this.instruction != null)
-			str.append(String.format("%s\t%s\t\t%s\s%s", this.machineCode, this.machineCode.getHexCode(), this.instruction.getKey(), this.label.getKey()));
+		if(this.label != null && typeEBNF.equals(EBNF.INHERENT2.name()))
+			str.append(String.format("%s\t%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.label.getKey(), this.instruction));
+		else if(this.label != null && this.instruction != null){
+			str.append(String.format("%s\t%s\t\t%s ", this.machineCode, this.machineCode.getHexCode(), this.instruction));
+			str.append(this.label.getKey());
+
+		}
 		else if(this.instruction == null && this.label != null)
-			str.append(String.format("%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.label.getKey()));
+			str.append(String.format("%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(),label.getKey()));
 		else
-			str.append(String.format("%s\t%s\t\t%s", this.machineCode, this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction.getKey()));
+			str.append(String.format("%s\t%s\t\t%s", this.machineCode, this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction));
 		
 		return str.append(this.comment == null ? "" : "\t"+this.comment).toString();
-	}
-	
-
-	
+	}	
 }
