@@ -33,7 +33,6 @@ public class cma {
         }
     }
     public static void printBinaryCode(Engine eng){
-        System.out.println("Binary Code");
         for(int i = 0; i < eng.getAssemblerUnit().sizeLineStatement() ; i++){
             System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode());
         }
@@ -102,6 +101,7 @@ public class cma {
                     printLines(eng);
                     printSymbols(eng);
                     printErrors(eng);
+                    System.out.println("Binary Code");
                     printBinaryCode(eng);
                     admin.outputln("cma: Closing '" + filename + "'");  
                 }
