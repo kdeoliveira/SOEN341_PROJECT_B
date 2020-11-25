@@ -3,7 +3,7 @@ package assembler;
 import assembler.tokenization.EBNF;
 import util.BinaryAddress;
 
-public class LineStatement {
+public class LineStatement{
 
 	private Node label;
 	private Instruction instruction;
@@ -12,6 +12,16 @@ public class LineStatement {
 	private BinaryAddress machineCode;
 	private String typeEBNF;
 
+	/**
+	 * Generates a line of statement based on Nodes and Comment
+	 * TODO: Factory class
+	 * 
+	 * @param lineNumber
+	 * @param label
+	 * @param instruction
+	 * @param comment
+	 * @param type
+	 */
 	public LineStatement (int lineNumber, Node label, Node instruction, Comment comment, String type)
 	{	
 		this.lineNumber = lineNumber;
@@ -71,16 +81,19 @@ public class LineStatement {
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		if(this.label != null && typeEBNF.equals(EBNF.INHERENT2.name()))
-			str.append(String.format("%s\t%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.label.getKey(), this.instruction));
+			str.append(String.format("%s\t\t%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.label.getKey(), this.instruction));
 		else if(this.label != null && this.instruction != null){
-			str.append(String.format("%s\t%s\t\t%s ", this.machineCode, this.machineCode.getHexCode(), this.instruction));
+			str.append(String.format("%s\t\t%s\t%s ", this.machineCode, this.machineCode.getHexCode(), this.instruction));
 			str.append(this.label.getKey());
 
 		}
 		else if(this.instruction == null && this.label != null)
-			str.append(String.format("%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(),label.getKey()));
+			str.append(String.format("%s\t\t%s\t%s", this.machineCode, this.machineCode.getHexCode(),label.getKey()));
 		else
-			str.append(String.format("%s\t%s\t\t%s", this.machineCode, this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction));
+			if(this.machineCode.getFormat() > 8)
+				str.append(String.format("%s\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction));
+			else
+				str.append(String.format("%s\t\t%s\t%s", this.machineCode, this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction));
 		
 		return str.append(this.comment == null ? "" : "\t"+this.comment).toString();
 	}	

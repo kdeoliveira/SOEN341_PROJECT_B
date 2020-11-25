@@ -14,29 +14,40 @@ public class Parser implements Parsable{
         this.semantic = EBNF.values();
     }
 
+    
+
+    /**
+     * Receives an array of Tokens (tokens implements the interface vertex<>) and verifies if tokens matches the EBNF syntax defined in EBNF.java
+     */
     public boolean parse(Vertex<?>...object){
         if(object.length == 0 || !(object[0] instanceof Token))  return false;
         returnValueObjects = new ArrayList<>();
-        List<SYNTAX> type = new ArrayList<>();
+        List<FORMAT> type = new ArrayList<>();
         
         for(Vertex<?> x : object)
-            type.add((SYNTAX) x.getKey());
+            type.add((FORMAT) x.getKey());
 
         if(type.size() > 1)
-            type.removeIf(n -> n == SYNTAX.COMMENT);
+            type.removeIf(n -> n == FORMAT.COMMENT);
 
-        if(this.internalParser(type.toArray(new SYNTAX[0])))
+        if(this.internalParser(type.toArray(new FORMAT[0])))
         {
             this.returnValueObjects.add(Arrays.toString(object));
             return true;
         }
         else{
+            
             this.returnValueObjects.add(new Error<Integer>(1, Arrays.toString(object)));
             return false;
         }
     }
 
-    private boolean internalParser(SYNTAX[] cmp){
+    /**
+     * Internal parsing for further verification. If tokens don't match, return false
+     * @param cmp
+     * @return boolean
+     */
+    private boolean internalParser(FORMAT[] cmp){
         for(int i = 0 ; i < this.semantic.length ; i++)
         {
             
@@ -47,6 +58,7 @@ public class Parser implements Parsable{
             }
         }
         this.typeEBNF = null;
+        
         return false;
     }
 
@@ -60,15 +72,13 @@ public class Parser implements Parsable{
 
     public static void main(String[] args){
         Lexer lex = new Lexer();
-        System.out.println(lex.tokenization("","add",";add something"));
+        System.out.println(lex.tokenization("","add.u8","-3"));
 
         Vertex<?>[] tokens = lex.getTokens().toArray(new Vertex<?>[0]);
 
-        System.out.println(lex.getTokens());
-
         Parser parser = new Parser();
 
-        parser.parse(tokens);
+        System.out.println(parser.parse(tokens));
 
         
         System.out.println(parser.getReturnValueObjects());

@@ -4,8 +4,18 @@ import util.BinaryAddress;
 
 public class Node implements Vertex<String>{
     private static final long serialVersionUID = 240542041950251807L;
-    private String key;
-    private transient BinaryAddress value;
+    protected String key;
+    protected transient BinaryAddress value;
+
+    public Node(){}
+    public Node(Node node){
+        this.key = node.key;
+        this.value = node.value;
+    }
+    public Node(BinaryAddress hex){
+        this.key = "";
+        this.value = hex != null ? hex : new BinaryAddress(0x0);
+    }
 
     public Node(int hex, String name){
         this.value = new BinaryAddress(hex);
@@ -23,7 +33,7 @@ public class Node implements Vertex<String>{
     public BinaryAddress getValue() {
         return this.value;
     }
-
+    
     public void setValue(BinaryAddress value) {
         this.value = value;
     }

@@ -13,11 +13,15 @@ public class Lexer implements Lexical{
 
     public Lexer(){
         StringBuilder regex = new StringBuilder();
-        for(SYNTAX x : SYNTAX.values())
+        for(FORMAT x : FORMAT.values())
             regex.append(String.format("|(?<%s>%s)", x.name(), x.getPattern()));
         this.pattern = Pattern.compile(regex.substring(1));
     }
 
+    /**
+     * Receives one or a string of Strings and generates an array of tokens if format matches one static instance of enum FORMAT.java
+     * 
+     */
     public boolean tokenization(CharSequence...input){
         if(!(input[0] instanceof Comparable) || input.length == 0)
             throw new IllegalCallerException();
@@ -42,12 +46,22 @@ public class Lexer implements Lexical{
 
     }
 
+    /**
+     * Internal function for tokenization. Makes further verification in case of invalid format
+     * @param matcher
+     * @param in
+     * @param cnt
+     * @return
+     */
     private int internalTokenization(Matcher matcher, String in, int cnt){
         if(matcher.find() && matcher.end() == in.length()){
-            for(SYNTAX x : SYNTAX.values())
+            for(FORMAT x : FORMAT.values())
             {
                 if(matcher.group(x.name()) != null){
-                    if((cnt == 0 && x == SYNTAX.OPCODE) || (cnt == 1 && x == SYNTAX.LABEL)){
+                    if(
+                    (cnt == 0 && 
+                    (x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE)
+                    ) || (cnt == 1 && x == FORMAT.LABEL)){
                         this.generateError(null, in);                        
                         return in.length();
                     }
@@ -61,6 +75,12 @@ public class Lexer implements Lexical{
         return in.length();
     }
 
+    /**
+     * Internal function to generate an error array instead, in case of invalid format
+     * @param matcher
+     * @param input
+     */
+    
     private void generateError(Matcher matcher, String input){
         try{
             if(matcher == null) throw new IllegalStateException();
@@ -89,15 +109,15 @@ public class Lexer implements Lexical{
      * Class is not invoked statically;
      * Reset if necessary to reinitialize data members values
      */
-    // public void reset(){
-    //     this.tokens.clear();
-    //     this.tokenPosition = 0;
-    //     this.tokenLength = 0;
-    // }
+    public void reset(){
+        this.tokens.clear();
+        this.tokenPosition = 0;
+        this.tokenLength = 0;
+    }
 
     public static void main(String[] args){
             Lexer lex = new Lexer();
-            System.out.println(lex.tokenization("", " Label", ";kfsfsd"));
+            System.out.println(lex.tokenization("", "add*", ";kfsfsd"));
             System.out.println((lex.getTokens()));
             System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
 

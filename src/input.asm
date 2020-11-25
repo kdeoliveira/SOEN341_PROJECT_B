@@ -3,7 +3,7 @@
  dup
  exit
  ret
- not Label
+ not
  and
 Labe;l ;532413465
 ;;
@@ -24,7 +24,10 @@ Loop add
  shr
  teq
  tne
- ldv.u8 4564
+ ldv.u3 6
+
+ ldc.i8 Label
+ ldc.i8 10
  tlt
  tgt
  tle 

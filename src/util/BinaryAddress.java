@@ -11,36 +11,42 @@ public class BinaryAddress {
      * CONSTRUCTORS
      */
 
+    public BinaryAddress(BinaryAddress bin){
+        this.binaryAddress = bin.binaryAddress;
+        this.signed = bin.signed;
+        this.format = bin.format;
+        this.hexCode = bin.hexCode;
+    }
+
     public BinaryAddress(String hex, boolean signed){
         this.binaryAddress = Integer.decode(hex);
         this.signed = signed;
         this.hexCode = this.convertHex(this.binaryAddress);
         this.format = 8;
+        this.checkSignedBinary();
     }
     public BinaryAddress(int hex){
         this.binaryAddress = hex;        
         this.signed = false;
         this.hexCode = this.convertHex(this.binaryAddress);
         this.format = 8;
+        this.checkSignedBinary();
     }
     public BinaryAddress(int hex, boolean signed){
         this.binaryAddress = hex;        
         this.signed = signed;
         this.hexCode = this.convertHex(this.binaryAddress);
         this.format = 8;
+        this.checkSignedBinary();
     }
     public BinaryAddress(int hex, boolean signed, int range){
-        if(hex > (int) Math.pow(2, range) - 1)     throw new OutOfMemoryError();
+        //CHeck for negatives as well
         this.binaryAddress = hex;        
         this.signed = signed;
         this.hexCode = this.convertHex(this.binaryAddress);
         this.format = range;
+        this.checkSignedBinary();
     }
-    // public BinaryAddress(char[] hex, boolean signed){
-    //     char[] tempHex = Arrays.copyOf(hex, hex.length);
-    //     this.signed = signed;
-    //     this.hexCode = this.convertHex(this.binaryAddress);
-    // }
 
     
 
@@ -59,6 +65,10 @@ public class BinaryAddress {
         return toBinaryFormat(this.binaryAddress);
     }
 
+    public int getFormat() {
+        return format;
+    }
+
     public boolean isSigned(){
         return this.signed;
     }
@@ -69,6 +79,36 @@ public class BinaryAddress {
 
     public void setSigned(boolean signed) {
         this.signed = signed;
+        this.checkSignedBinary();
+    }
+    public void setSigned(String signed) {
+        if(signed.equals("u"))
+            this.signed = false;
+        else if(signed.equals("i"))
+            this.signed = true;
+        this.checkSignedBinary();
+    }
+
+    public void setFormat(int format){
+        this.format = format;
+        this.checkSignedBinary();
+    }
+
+    /**
+     * Verifies if binary number is in range
+     * Depends on boolean signed and integer format
+     */
+    private void checkSignedBinary(){
+        if(this.signed){
+            int lowBound = (int) (Math.pow(2, this.format)/2 ) * -1;
+            int upperBound = (int) (Math.pow(2, this.format)/2 ) - 1;
+
+            if(!(this.binaryAddress <= upperBound && this.binaryAddress >= lowBound))
+                throw new UnsupportedOperationException();
+        }else
+            if(this.binaryAddress < 0 || this.binaryAddress > (int) Math.pow(2, this.format) - 1)
+                throw new UnsupportedOperationException();
+            
     }
 
     /**
@@ -122,22 +162,7 @@ public class BinaryAddress {
     public BinaryAddress add(BinaryAddress x){
         if(x == null)   return this;
 
-        int sum;
-        if(!x.isSigned()){
-            
-            sum = this.binaryAddress + x.binaryAddress;
-            return new BinaryAddress(sum, this.signed);
-        }
-        else{
-            if(x.binaryAddress >> 3 == 0){
-                sum = this.binaryAddress + (x.binaryAddress & 0x7);
-            }
-            else{
-                sum = this.binaryAddress - (x.binaryAddress & 0x7);
-            }
-        }
-
-        return new BinaryAddress(sum, this.signed);
+        return new BinaryAddress(this.binaryAddress + x.binaryAddress, false);
         
     }
 
@@ -148,17 +173,7 @@ public class BinaryAddress {
     public void plus(BinaryAddress x){
         if(x == null)   return;
 
-        if(!x.isSigned()){
-            this.binaryAddress += x.binaryAddress;
-        }
-        else{
-            if(x.binaryAddress >> 3 == 0){
-                this.binaryAddress += (x.binaryAddress & 0x7);
-            }
-            else{
-                this.binaryAddress -= (x.binaryAddress & 0x7);
-            }
-        }
+        this.binaryAddress += x.binaryAddress;
         this.hexCode = this.convertHex(this.binaryAddress);
     }
 
@@ -175,20 +190,21 @@ public class BinaryAddress {
     }
 
     public BinaryAddress concat(BinaryAddress x){
-        return new BinaryAddress(((this.binaryAddress << 4) + (x.binaryAddress & 0xff)), false, 16);
+        return new BinaryAddress(((this.binaryAddress << 8) + (x.binaryAddress & 0xff)), false, 16);
     }
 
 
 
     public static void main(String[] args){
         BinaryAddress mem = new BinaryAddress("0xBF", false);
-        BinaryAddress mem1 = new BinaryAddress(0x01, false);
+        BinaryAddress mem1 = new BinaryAddress(-4, true, 3);
 
         System.out.println(mem +"\t" + mem.getHexCode());
         System.out.println(mem1 +"\t" + mem1.getHexCode());
+        System.out.println(mem.concat(mem1).getHexCode());
         System.out.println();
         mem.plus(mem1);
-        System.out.println("After sum: "+mem +"\t" + mem.getHexCode());
+        System.out.println("After plus: "+mem +"\t" + mem.getHexCode());
 
         System.out.println();
 

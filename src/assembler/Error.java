@@ -1,6 +1,6 @@
 package assembler;
 
-import assembler.tokenization.SYNTAX;
+import assembler.tokenization.FORMAT;
 import assembler.tokenization.Token;
 
 public class Error<S extends Comparable<S>> implements Vertex<S> {
@@ -26,7 +26,7 @@ public class Error<S extends Comparable<S>> implements Vertex<S> {
         return this.value.getValue();
     }
 
-    public SYNTAX getType() {
+    public FORMAT getType() {
         return this.value.getKey();
     }
 
@@ -34,7 +34,7 @@ public class Error<S extends Comparable<S>> implements Vertex<S> {
         return position;
     }
 
-    public boolean contain(SYNTAX type){
+    public boolean contain(FORMAT type){
         return this.value.getKey() == type;
     }
 

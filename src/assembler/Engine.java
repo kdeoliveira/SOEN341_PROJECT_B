@@ -6,10 +6,8 @@ import assembler.tokenization.*;
 import util.*;
 
 public class Engine {
-    private Map<String,BinaryAddress> dictMap;
-    private List<LineStatement> lines;
-    private List<Node> labels;
-    private List<CharSequence> errorList;
+    private final Map<String,BinaryAddress> dictMap;
+    private AssemblerUnit assemblerUnit;
     private int numberOfLine;
     private BinaryAddress memoryAddress;
     private Lexical lex;
@@ -18,21 +16,27 @@ public class Engine {
     public Engine(Map<String, BinaryAddress> dict, Lexical lexer, Parsable parser) {
         this.dictMap = dict;
 
+        this.assemblerUnit = new AssemblerUnit();
+
         this.memoryAddress = new BinaryAddress(0x0);
-        this.lines = new ArrayList<>();
-        this.labels = new ArrayList<>();
-        this.errorList = new ArrayList<>();
+
         this.numberOfLine = 0;
         this.lex = lexer;
         this.parser = parser;
     }
 
+    /**
+     * Receives an array of strings, which represents one line, for lexical analysis, parsing and dictionary verificaion
+     * @param code
+     * @return
+     */
     public boolean assemble(String...code){
         if(code.length == 0)    return false;
+        if(code.length == 1 && code[0].isEmpty())   return true;
         
         if(!this.checkSyntax(code) || 
         !this.checkSemantic(lex.getTokens().toArray(new Vertex<?>[0])) || 
-        !this.checkDictionary(lex.getTokens().toArray(new Vertex<?>[0]))) return false;
+        !this.createLineStatement(lex.getTokens().toArray(new Vertex<?>[0]))) return false;
         
         this.numberOfLine++;
         this.memoryAddress.plus(0x1);
@@ -41,25 +45,34 @@ public class Engine {
 
     private boolean checkSyntax(String...code){
         if(!lex.tokenization(code)){
-            this.errorList.addAll(lex.getTokens());
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkSemantic(CharSequence...code){
-        if(!parser.parse((Vertex<?>[]) code)) {
-            if(parser.getReturnValueObjects() == null)
-                this.errorList.add(new Error<Integer>(0, "Incorrect format"));
-            else
-                this.errorList.addAll(parser.getReturnValueObjects());
+            
+            this.assemblerUnit.addAll(lex.getTokens());
             return false;
         }
         
         return true;
     }
 
-    private boolean checkDictionary(CharSequence...code){
+    private boolean checkSemantic(Vertex<?>...code){
+        if(!parser.parse(code)) {
+            
+            if(parser.getReturnValueObjects() == null)
+                this.assemblerUnit.add(new Error<Integer>(0, "Incorrect format"));
+            else
+                this.assemblerUnit.addAll(parser.getReturnValueObjects());
+            return false;
+        }
+
+        
+        return true;
+    }
+
+    /**
+     * Creates lines of instruction for each parsed lines
+     * @param code
+     * @return
+     */
+    private boolean createLineStatement(Vertex<?>...code){
         int cnt = 0;
         boolean flag = false;
         Instruction inst = null;
@@ -68,61 +81,68 @@ public class Engine {
 
         for(int i = 0; i < code.length ; i++){
             cnt+=code[i].length();
-            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.LABEL)){
+            if(code[i].getKey().equals(FORMAT.LABEL)){
                 label = new Node(0, Token.class.cast(code[i]).getValue());
                 if(i == 0){
                     flag = true;
                     label.setValue(new BinaryAddress(this.numberOfLine));
-                    this.labels.add(label);
+                    this.assemblerUnit.add(label);
                 }
             }   
-            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.COMMENT)){
+            if(code[i].getKey().equals(FORMAT.COMMENT)){
                 comment = new Comment(Token.class.cast(code[i]).getValue());
                 flag =true;
             }
-            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.OPCODE) && this.dictMap.containsKey(Token.class.cast(code[i]).getValue()) )
-            {
+            
+            if(checkDictionary(code[i]) != null){
+                inst = checkDictionary(code[i]);
                 flag = true;
-                inst = new Instruction(this.dictMap.get(Token.class.cast(code[i]).getValue()), Token.class.cast(code[i]).getValue(), this.parser.getTypeEBNF());
             }
-            if(Token.class.cast(code[i]).getKey().equals(SYNTAX.OPERAND) && inst != null){
+                
+            if(code[i].getKey().equals(FORMAT.OPERAND) && inst != null){
                 flag = true;
+                
                 inst.setOperand(new Operand(new BinaryAddress(Token.class.cast(code[i]).getValue(), false), Token.class.cast(code[i]).getValue()));
             }
         }
 
         if(flag){
-            this.lines.add(new LineStatement(this.numberOfLine+1, label, inst, comment, parser.getTypeEBNF()));
+            this.assemblerUnit.add(new LineStatement(this.numberOfLine+1, label, inst, comment, parser.getTypeEBNF()));
+            
             return true;
         }
         else{
-            this.errorList.add(new Error<>(cnt, Arrays.toString(code)));
+            this.assemblerUnit.add(new Error<>(cnt, Arrays.toString(code)));
             return false;
         }
     }
 
-    public List<LineStatement> getLines() {
-        return lines;
+    /**
+     * Creates an instruction based on opcode
+     * @param code
+     * @return
+     */
+    private Instruction checkDictionary(Vertex<?> code){
+        if(
+            (code.getKey().equals(FORMAT.OPCODEINHERENT) || 
+            code.getKey().equals(FORMAT.OPCODERELATIVE) ||
+            code.getKey().equals(FORMAT.OPCODEIMMEDIATE) )
+        && this.dictMap.containsKey(Token.class.cast(code).getValue()) )
+        {
+            return new Instruction(this.dictMap.get(Token.class.cast(code).getValue()), Token.class.cast(code).getValue(), this.parser.getTypeEBNF());
+        }
+        return null;
     }
 
     public int getNumberOfLine() {
         return numberOfLine;
     }
 
-    public List<Node> getLabels() {
-        return labels;
+    public AssemblerUnit getAssemblerUnit() {
+        return assemblerUnit;
     }
 
     public BinaryAddress getMemoryAddress() {
         return memoryAddress;
     }
-
-    public List<CharSequence> getErrorList() {
-        return errorList;
-    }
-
-    public boolean hasErrors(){
-        return this.errorList.isEmpty();
-    }
-
 }

@@ -5,20 +5,29 @@
  ret
  not
  and
- or 
- xor
- neg
+Labe;l ;532413465
+;;
+ xor ;sfsdfsdfs
+ neg ;sdfsdfds
  inc
- dec
+ dec 
+Loop add
  add
- sub
+ sub ;fdgfgg
+ ;gfgfgfgfg
+ ;gfgfgfgfg
  mul
- div
- rem
+ div 
+ ;dsfsdfdf
+ rem ;add something
  shl
  shr
  teq
  tne
+ ldv.u3 -3
+
+ ldc.i8 Label
+ ldc.i8 10
  tlt
  tgt
  tle 

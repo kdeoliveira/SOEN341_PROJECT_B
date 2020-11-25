@@ -5,17 +5,17 @@ import assembler.Vertex;
 /**
  * Eventually change CharSequence implementation to another more preferrable
  */
-public class Token implements Vertex<SYNTAX>{
-    private final SYNTAX key;
+public class Token implements Vertex<FORMAT>{
+    private final FORMAT key;
     private static final long serialVersionUID = 760703066967345L;
     private String value;
 
-    public Token(SYNTAX type, String data){
+    public Token(FORMAT type, String data){
         this.key = type;
         this.value = data;
     }
 
-    public SYNTAX getKey() {
+    public FORMAT getKey() {
         return this.key;
     }
 

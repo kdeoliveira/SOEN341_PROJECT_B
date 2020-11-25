@@ -11,30 +11,31 @@ import util.*;
 public class cma {
 
     public static void printLines(Engine eng){
-        System.out.println("#\tMemory Address\tMachine Code\tHex\tMnemonic");
+        System.out.println("#\tMemory Address\tMachine Code\t\tHex\tMnemonic");
         for(int i = 0; i < eng.getNumberOfLine() ; i++){
-            System.out.println(eng.getLines().get(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
-            eng.getLines().get(i));
+            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
+            eng.getAssemblerUnit().getLineStatements(i)
+            );
         }
     }
     public static void printSymbols(Engine eng){
-        System.out.println("Label List #"+eng.getLabels().size());
+        System.out.println("Label List #"+eng.getAssemblerUnit().sizeLabel());
         System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel");
-        for(int i = 0; i < eng.getLabels().size() ; i++){
-            System.out.println(i+1+"\t"+eng.getLabels().get(i).getValue()+"\t"+
-            eng.getLabels().get(i));
+        for(int i = 0; i < eng.getAssemblerUnit().sizeLabel() ; i++){
+            System.out.println(i+1+"\t"+eng.getAssemblerUnit().getLabel(i).getValue()+"\t"+
+            eng.getAssemblerUnit().getLabel(i));
         }
     }
     public static void printErrors(Engine eng){
-        System.out.println("Error "+eng.getErrorList().size());
-        for(CharSequence x : eng.getErrorList()){
+        System.out.println("Error "+eng.getAssemblerUnit().sizeError());
+        for(CharSequence x : eng.getAssemblerUnit().getListofErrors()){
             System.out.println(x.toString());
         }
     }
     public static void printBinaryCode(Engine eng){
         System.out.println("Binary Code");
-        for(int i = 0; i < eng.getNumberOfLine() ; i++){
-            System.out.print(eng.getLines().get(i).getMachineCode());
+        for(int i = 0; i < eng.getAssemblerUnit().sizeLineStatement() ; i++){
+            System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode());
         }
         System.out.println();
     }
@@ -84,6 +85,7 @@ public class cma {
     
                 Engine eng = new Engine(dic, new Lexer(), new Parser());
 
+                
 
                 
                 for(String[] x : src){
@@ -91,6 +93,7 @@ public class cma {
                         break;
                 }
 
+                
                 printBinaryCode(eng);
                 System.out.println();
                 if (verbose){

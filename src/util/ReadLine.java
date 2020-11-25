@@ -130,7 +130,7 @@ public class ReadLine implements Closeable, Iterable<String[]> {
 
     public static void main(String[] args){
 
-        try(ReadLine rl = new ReadLine("input.asm", 4)){
+        try(ReadLine rl = new ReadLine("dictionary", 2)){
             // rl.setRegex("\\s(?=;)|\\s(?!.[\\w\\W\\s]+)|^\\s{1}");
             for(String[] x : rl){
                 System.out.println(Arrays.toString(x));

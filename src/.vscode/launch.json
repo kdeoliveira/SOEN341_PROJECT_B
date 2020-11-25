@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - EBNF",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.EBNF",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BinaryAddress",
+            "request": "launch",
+            "mainClass": "util.BinaryAddress",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - BinarySearchTree",
             "request": "launch",
             "mainClass": "util.BinarySearchTree",
