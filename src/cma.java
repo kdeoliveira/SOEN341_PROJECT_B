@@ -76,7 +76,8 @@ public class cma {
             ReadLine src = new ReadLine(file,4);
             PrintStream stream = new PrintStream(new File("output.lst"));
             PrintStream symbols = new PrintStream(new File("symbols.lst"));
-            PrintStream errors = new PrintStream(new File("errors.lst"))
+            PrintStream errors = new PrintStream(new File("errors.lst"));
+            PrintStream executable = new PrintStream(new File("program.exe"))
             )
             {
                 for(String[] x : dictFile){
@@ -94,13 +95,14 @@ public class cma {
                 }
 
                 
-                printBinaryCode(eng);
+                
                 System.out.println();
                 if (verbose){
                     System.setOut(System.out);
                     printLines(eng);
                     printSymbols(eng);
                     printErrors(eng);
+                    printBinaryCode(eng);
                     admin.outputln("cma: Closing '" + filename + "'");  
                 }
                 
@@ -112,6 +114,9 @@ public class cma {
 
                 System.setOut(errors);            
                 printErrors(eng);
+
+                System.setOut(executable);            
+                printBinaryCode(eng);
                 
             }
             catch(IOException e)
