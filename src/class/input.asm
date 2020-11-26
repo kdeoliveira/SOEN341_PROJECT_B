@@ -24,7 +24,7 @@ Loop add
  shr
  teq
  tne
- ldv.u3 -3
+ ldv.u3 6
 
  ldc.i8 Label
  ldc.i8 10

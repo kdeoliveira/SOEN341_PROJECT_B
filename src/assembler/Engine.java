@@ -108,7 +108,6 @@ public class Engine {
 
         if(flag){
             this.assemblerUnit.add(new LineStatement(this.numberOfLine+1, label, inst, comment, parser.getTypeEBNF()));
-            
             return true;
         }
         else{

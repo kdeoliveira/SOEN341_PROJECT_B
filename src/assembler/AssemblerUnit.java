@@ -19,7 +19,7 @@ public class AssemblerUnit {
     }
 
     /**
-     * Adds either a LineStatement, an Error or a Symbolical Label
+     * Adds either a LineStatement, an Error or a Symbolic Label
      * @param object
      */
     public void add(Object object){
@@ -84,7 +84,4 @@ public class AssemblerUnit {
     public int getNumberOfLines(){
         return this.numberOfLine;
     }
-
-
-
 }

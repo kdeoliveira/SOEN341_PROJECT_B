@@ -32,9 +32,11 @@ public class cma {
             System.out.println(x.toString());
         }
     }
-    public static void printBinaryCode(Engine eng){
+    public static void printBinaryCode(Engine eng, PrintStream file){
         for(int i = 0; i < eng.getAssemblerUnit().sizeLineStatement() ; i++){
             System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode());
+            
+            file.write(eng.getAssemblerUnit().getLineStatements(i).getMachineCode().getBinaryAddress());
         }
         System.out.println();
     }
@@ -93,6 +95,7 @@ public class cma {
                         break;
                 }
 
+                printBinaryCode(eng, executable);
                 
                 
                 System.out.println();
@@ -102,7 +105,6 @@ public class cma {
                     printSymbols(eng);
                     printErrors(eng);
                     System.out.println("Binary Code");
-                    printBinaryCode(eng);
                     admin.outputln("cma: Closing '" + filename + "'");  
                 }
                 
@@ -114,9 +116,6 @@ public class cma {
 
                 System.setOut(errors);            
                 printErrors(eng);
-
-                System.setOut(executable);            
-                printBinaryCode(eng);
                 
             }
             catch(IOException e)

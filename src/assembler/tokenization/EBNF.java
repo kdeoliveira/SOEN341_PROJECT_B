@@ -25,5 +25,4 @@ public enum EBNF {
     public FORMAT[] getType() {
         return type;
     }
-    
 }

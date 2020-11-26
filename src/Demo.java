@@ -40,7 +40,8 @@ public class Demo{
         Map<String,BinaryAddress> dic = new BinarySearchTree<>();
 
         try(ReadLine file = new ReadLine("dictionary",3);
-        ReadLine src = new ReadLine("input.asm",4))
+        ReadLine src = new ReadLine("input.asm",4)
+            )
         {
             for(String[] x : file){
                 dic.put(x[0], new BinaryAddress(x[1], false));
@@ -56,7 +57,7 @@ public class Demo{
             printLines(eng);
             printBinaryCode(eng);
             printErrors(eng);
-            printSymbols(eng);
+            printSymbols(eng);       
         }
         catch(IOException e)
         {
