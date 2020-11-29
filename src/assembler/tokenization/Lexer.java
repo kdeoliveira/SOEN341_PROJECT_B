@@ -4,14 +4,26 @@ import java.util.*;
 import java.util.regex.*;
 
 import assembler.Error;
+import assembler.Node;
+import assembler.Operand;
+import util.BinaryAddress;
 
 public class Lexer implements Lexical{
     private List<CharSequence> tokens;
     private int tokenPosition;          // Character position start from 1 to String.length()
     private int tokenLength;
     private final Pattern pattern;
+    private Map<String, BinaryAddress> dictMap;
 
     public Lexer(){
+        StringBuilder regex = new StringBuilder();
+        for(FORMAT x : FORMAT.values())
+            regex.append(String.format("|(?<%s>%s)", x.name(), x.getPattern()));
+        this.pattern = Pattern.compile(regex.substring(1));
+    }
+
+    public Lexer(Map<String, BinaryAddress> map){
+        dictMap = map;
         StringBuilder regex = new StringBuilder();
         for(FORMAT x : FORMAT.values())
             regex.append(String.format("|(?<%s>%s)", x.name(), x.getPattern()));
@@ -59,13 +71,26 @@ public class Lexer implements Lexical{
             {
                 if(matcher.group(x.name()) != null){
                     if(
-                    (cnt == 0 && 
-                    (x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE)
-                    ) || (cnt == 1 && x == FORMAT.LABEL)){
+                    (   (x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE)
+                    && (!this.dictMap.containsKey(in) || cnt == 0)    )
+
+                    ||
+                    
+                    (   cnt == 1 && x == FORMAT.LABEL   )
+                    )
+                    {
                         this.generateError(null, in);                        
                         return in.length();
                     }
-                    tokens.add(new Token(x, matcher.group(x.name()).strip()));
+                    if(x == FORMAT.COMMENT){
+                        tokens.add(new Token(x, new Node(0, in)));
+                    }
+                    if(x == FORMAT.LABEL)
+                        tokens.add(new Token(x, new Node(0, in)));
+                    if(x == FORMAT.OPERAND)
+                        tokens.add(new Token(x, new Operand(Integer.valueOf(in), in)));
+                    if(x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE)
+                        tokens.add(new Token(x, new Node(this.dictMap.get(in), in)));
                 }
             }            
         }else{

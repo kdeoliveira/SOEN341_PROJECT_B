@@ -11,4 +11,7 @@ public class Operand extends Node{
     public Operand(BinaryAddress bin, String name){
         super(bin,name);
     }
+	public Operand(Integer valueOf, String strip) {
+        super(valueOf,strip);
+	}
 }

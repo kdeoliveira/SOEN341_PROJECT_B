@@ -11,18 +11,18 @@ import util.*;
 public class cma {
 
     public static void printLines(Engine eng){
-        System.out.println("#\tMemory Address\tMachine Code\t\tHex\tMnemonic");
-        for(int i = 0; i < eng.getNumberOfLine() ; i++){
-            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
+        System.out.println("#\tMemory Address\tMachine Code\tMnemonic");
+        for(int i = 0; i < eng.getAssemblerUnit().getNumberOfLines() ; i++){
+            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+"\t"+new BinaryAddress(i, false, 16).getHexCode()+"\t\t"+
             eng.getAssemblerUnit().getLineStatements(i)
             );
         }
     }
     public static void printSymbols(Engine eng){
         System.out.println("Label List #"+eng.getAssemblerUnit().sizeLabel());
-        System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel");
+        System.out.println("#\tMemory Address\tMachine Code\tLabel");
         for(int i = 0; i < eng.getAssemblerUnit().sizeLabel() ; i++){
-            System.out.println(i+1+"\t"+eng.getAssemblerUnit().getLabel(i).getValue()+"\t"+
+            System.out.println(eng.getAssemblerUnit().getLabelNumber(i)+"\t"+eng.getAssemblerUnit().getLabel(i).getValue()+"\t"+
             eng.getAssemblerUnit().getLabel(i));
         }
     }
@@ -41,6 +41,7 @@ public class cma {
         System.out.println();
     }
 
+    
     public static void main(String args[]) throws IOException {
         IListing       cmaListing  = cmaFactory.makeListing();
         IAdministrator admin       = cmaFactory.makeAdmin(args);
@@ -63,7 +64,11 @@ public class cma {
         // Executing.
         ArrayList<String> files = admin.getArguments();
         for (String filename : files) {
-
+        	
+        	SourceFile srcFile = new SourceFile(filename);
+        	String srcListingFile = srcFile.getName()+".lst";
+        	String executableFile = srcFile.getName()+".exe";
+        	
             File file = new File(filename);
             if ( !file.canRead() ) {
                 admin.outputln("cma: Can't open file '" + filename + "'");
@@ -75,17 +80,17 @@ public class cma {
 
             try(ReadLine dictFile = new ReadLine("dictionary",3);
             ReadLine src = new ReadLine(file,4);
-            PrintStream stream = new PrintStream(new File("output.lst"));
+            PrintStream stream = new PrintStream(new File(srcListingFile));
             PrintStream symbols = new PrintStream(new File("symbols.lst"));
             PrintStream errors = new PrintStream(new File("errors.lst"));
-            PrintStream executable = new PrintStream(new File("program.exe"))
+            PrintStream executable = new PrintStream(new File(executableFile))
             )
             {
                 for(String[] x : dictFile){
                     dic.put(x[0], new BinaryAddress(x[1], false));
                 }
     
-                Engine eng = new Engine(dic, new Lexer(), new Parser());
+                Engine eng = new Engine(dic, new Lexer(dic), new Parser());
 
                 
 
@@ -94,6 +99,8 @@ public class cma {
                     if(!eng.assemble(x))
                         break;
                 }
+
+                // eng.pass2();
 
                 printBinaryCode(eng, executable);
                 
@@ -104,7 +111,7 @@ public class cma {
                     printLines(eng);
                     printSymbols(eng);
                     printErrors(eng);
-                    System.out.println("Binary Code");
+                    
                     admin.outputln("cma: Closing '" + filename + "'");  
                 }
                 
