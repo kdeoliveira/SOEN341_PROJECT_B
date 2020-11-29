@@ -6,6 +6,10 @@ public class Comment{
         this.comment = comment;
     }
 
+    public Comment(){
+        this.comment = "";
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
     }

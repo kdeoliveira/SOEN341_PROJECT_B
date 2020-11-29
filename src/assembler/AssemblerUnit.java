@@ -2,10 +2,13 @@ package assembler;
 
 import java.util.*;
 
+import assembler.tokenization.EBNF;
+
 public class AssemblerUnit {
     private List<LineStatement> lines;
     private int numberOfLine;
     private List<Node> labels;
+    private List<Integer> labelsNumberOfLine;
     private List<CharSequence> errorList;
 
     /**
@@ -15,6 +18,7 @@ public class AssemblerUnit {
         this.lines = new ArrayList<>();
         this.labels = new ArrayList<>();
         this.errorList = new ArrayList<>();
+        this.labelsNumberOfLine = new ArrayList<>();
         this.numberOfLine = 0;
     }
 
@@ -24,8 +28,11 @@ public class AssemblerUnit {
      */
     public void add(Object object){
         if(object instanceof LineStatement){
-            lines.add((LineStatement) object);
-            numberOfLine++;
+            if(!((LineStatement) object).getTypeEBNF().equals(EBNF.COMMENT.name())){
+                //Fix number of line in LineStatement
+                lines.add((LineStatement) object);
+                numberOfLine++;
+            }
         }
         else if(object instanceof Node)
             labels.add((Node) object);
@@ -43,6 +50,13 @@ public class AssemblerUnit {
             labels.addAll((Collection<Node>) object);
         else if(object instanceof CharSequence)
             errorList.addAll((Collection<CharSequence>) object);
+    }
+
+    public void addLabelNumber(int i){
+        this.labelsNumberOfLine.add(i);
+    }
+    public int getLabelNumber(int i){
+        return this.labelsNumberOfLine.get(i);
     }
 
     public LineStatement getLineStatements(int i){

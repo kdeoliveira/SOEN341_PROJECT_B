@@ -7,41 +7,11 @@ import java.util.Map;
 
 public class Demo{
 
-    public static void printLines(Engine eng){
-        System.out.println("#\tMemory Address\tMachine Code\t\tHex\tMnemonic");
-        for(int i = 0; i < eng.getNumberOfLine() ; i++){
-            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+"\t"+new BinaryAddress(i)+"\t"+
-            eng.getAssemblerUnit().getLineStatements(i)
-            );
-        }
-    }
-    public static void printSymbols(Engine eng){
-        System.out.println("Label List #"+eng.getAssemblerUnit().sizeLabel());
-        System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel");
-        for(int i = 0; i < eng.getAssemblerUnit().sizeLabel() ; i++){
-            System.out.println(i+1+"\t"+eng.getAssemblerUnit().getLabel(i).getValue()+"\t"+
-            eng.getAssemblerUnit().getLabel(i));
-        }
-    }
-    public static void printErrors(Engine eng){
-        System.out.println("Error "+eng.getAssemblerUnit().sizeError());
-        for(CharSequence x : eng.getAssemblerUnit().getListofErrors()){
-            System.out.println(x.toString());
-        }
-    }
-    public static void printBinaryCode(Engine eng){
-        System.out.println("Binary Code");
-        for(int i = 0; i < eng.getAssemblerUnit().sizeLineStatement() ; i++){
-            System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode());
-        }
-        System.out.println();
-    }
     public static void main(String[] args) {
         Map<String,BinaryAddress> dic = new BinarySearchTree<>();
 
         try(ReadLine file = new ReadLine("dictionary",3);
-        ReadLine src = new ReadLine("input.asm",4)
-            )
+        ReadLine src = new ReadLine("input.asm",4))
         {
             for(String[] x : file){
                 dic.put(x[0], new BinaryAddress(x[1], false));
@@ -53,11 +23,26 @@ public class Demo{
                 if(!eng.assemble(x))
                     break;
             
+            cma.printLines(eng);	
+            /*System.out.println("#\tMemory Address\tMachine Code\tHex\tLabel\tMnemonic");
+            for(int i = 0; i < eng.getAssemblerUnit().getNumberOfLines() ; i++){
+            	System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+"\t"+new BinaryAddress(i, false, 16).getHexCode()+"\t\t"+
+                        eng.getAssemblerUnit().getLineStatements(i));
+            }*/
 
-            printLines(eng);
-            printBinaryCode(eng);
-            printErrors(eng);
-            printSymbols(eng);       
+            cma.printSymbols(eng);
+            /*System.out.println("Label List #"+eng.getAssemblerUnit().sizeLabel());
+            System.out.println("#\tMemory Address\tMachine Code\tLabel");
+            for(int i = 0; i < eng.getAssemblerUnit().sizeLabel() ; i++){
+                System.out.println(eng.getAssemblerUnit().getLabelNumber(i)+"\t"+eng.getAssemblerUnit().getLabel(i).getValue()+"\t"+
+                eng.getAssemblerUnit().getLabel(i));
+            }*/
+            
+            cma.printErrors(eng);
+            /*System.out.println("Error "+eng.getAssemblerUnit().sizeError());
+            for(CharSequence x : eng.getAssemblerUnit().getListofErrors()){
+                System.out.println(x.toString());
+            }*/
         }
         catch(IOException e)
         {
