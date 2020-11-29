@@ -31,3 +31,4 @@ class Option implements IOption {
  private String  shortName, longName, description;
  private boolean enabled;
 }
+

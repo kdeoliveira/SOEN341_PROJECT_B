@@ -106,8 +106,10 @@ public class BinaryAddress {
             if(!(this.binaryAddress <= upperBound && this.binaryAddress >= lowBound))
                 throw new UnsupportedOperationException();
         }else
-            if(this.binaryAddress < 0 || this.binaryAddress > (int) Math.pow(2, this.format) - 1)
+            if(this.binaryAddress < 0 || this.binaryAddress > (int) Math.pow(2, this.format) - 1){
+                System.out.println("**"+Integer.toHexString(binaryAddress)+"  "+format);
                 throw new UnsupportedOperationException();
+            }
             
     }
 
@@ -178,7 +180,7 @@ public class BinaryAddress {
     }
 
     /**
- * Returns unisgned byte
+ * Returns unsigned byte
  * @param x
  */
     public void plus(int x){
@@ -190,6 +192,8 @@ public class BinaryAddress {
     }
 
     public BinaryAddress concat(BinaryAddress x){
+        // System.out.println("--->"+Integer.toHexString(binaryAddress)+"+"+x.binaryAddress+"\t"+format+"+"+x.format);
+        // System.out.println("Result--->"+Integer.toHexString((this.binaryAddress << x.format) + (x.binaryAddress & 0xff)));
         return new BinaryAddress(((this.binaryAddress << 8) + (x.binaryAddress & 0xff)), false, 16);
     }
 

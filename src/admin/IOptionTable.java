@@ -44,3 +44,4 @@ class OptionTable implements IOptionTable {
  private HashMap<String, IOption> options;
  private static final IOption invalid = new Option("", "<invalid>", "Invalid Option.");
 }
+

@@ -35,10 +35,11 @@ public class Engine {
         if(code.length == 1 && code[0].isEmpty())   return true;
         
         if(!this.checkSyntax(code) || 
-        !this.checkSemantic(lex.getTokens().toArray(new Vertex<?>[0])) || 
-        !this.createLineStatement(lex.getTokens().toArray(new Vertex<?>[0]))) return false;
+        !this.checkSemantic(lex.getTokens().toArray(new Vertex<?>[0]))
+        ) return false;
         
-        this.numberOfLine++;
+        if(!((LineStatement) parser.getLineStatement()).getTypeEBNF().equals(EBNF.COMMENT.name()))
+            this.numberOfLine++;
         this.memoryAddress.plus(0x1);
         return true;
     }
@@ -46,7 +47,9 @@ public class Engine {
     private boolean checkSyntax(String...code){
         if(!lex.tokenization(code)){
             
-            this.assemblerUnit.addAll(lex.getTokens());
+            // this.assemblerUnit.addAll(lex.getTokens());
+            for(CharSequence x : lex.getTokens())
+                this.assemblerUnit.add(x);
             return false;
         }
         
@@ -54,84 +57,46 @@ public class Engine {
     }
 
     private boolean checkSemantic(Vertex<?>...code){
-        if(!parser.parse(code)) {
-            
-            if(parser.getReturnValueObjects() == null)
-                this.assemblerUnit.add(new Error<Integer>(0, "Incorrect format"));
-            else
-                this.assemblerUnit.addAll(parser.getReturnValueObjects());
-            return false;
+        try {
+	    	if(!parser.parse(code)) {
+	            
+	            if(parser.getReturnValueObjects() == null)
+	                this.assemblerUnit.add(new Error<Integer>(0, "Incorrect format"));
+	            else{
+	                for(CharSequence x : parser.getReturnValueObjects())
+	                    this.assemblerUnit.add(x);
+	            }
+	            return false;
+	        }
+	    	parser.getLineStatement().checkBinaryValue(this.numberOfLine + 1);
+        } 
+        catch (Exception e) {
+        	this.assemblerUnit.add(new Error<Integer>(0, " Operand out of bounds"));
+        	return false;
         }
-
         
+        this.assemblerUnit.add(parser.getLineStatement());
+        
+        if(parser.getLineStatement().getLabel() != null){
+
+            this.assemblerUnit.add(parser.getLineStatement().getLabel());
+            this.assemblerUnit.addLabelNumber(this.numberOfLine+1);
+        }       
         return true;
     }
 
-    /**
-     * Creates lines of instruction for each parsed lines
-     * @param code
-     * @return
-     */
-    private boolean createLineStatement(Vertex<?>...code){
-        int cnt = 0;
-        boolean flag = false;
-        Instruction inst = null;
-        Node label = null;
-        Comment comment = null;
-
-        for(int i = 0; i < code.length ; i++){
-            cnt+=code[i].length();
-            if(code[i].getKey().equals(FORMAT.LABEL)){
-                label = new Node(0, Token.class.cast(code[i]).getValue());
-                if(i == 0){
-                    flag = true;
-                    label.setValue(new BinaryAddress(this.numberOfLine));
-                    this.assemblerUnit.add(label);
+    public boolean pass2(){
+        if(this.assemblerUnit.sizeLineStatement() == 0 || this.assemblerUnit.sizeLabel() == 0)  return false;
+        for(int i =0; i < assemblerUnit.sizeLabel(); i++){
+            for(int j=0; j < assemblerUnit.sizeLabel() ; j++){
+                if(assemblerUnit.getLineStatements(j).getLabel() != null && assemblerUnit.getLineStatements(j).getLabel() == assemblerUnit.getLabel(i)){
+                    this.assemblerUnit.getLineStatements(j).getInstruction().setOperand(assemblerUnit.getLabel(i));
                 }
-            }   
-            if(code[i].getKey().equals(FORMAT.COMMENT)){
-                comment = new Comment(Token.class.cast(code[i]).getValue());
-                flag =true;
-            }
-            
-            if(checkDictionary(code[i]) != null){
-                inst = checkDictionary(code[i]);
-                flag = true;
-            }
-                
-            if(code[i].getKey().equals(FORMAT.OPERAND) && inst != null){
-                flag = true;
-                
-                inst.setOperand(new Operand(new BinaryAddress(Token.class.cast(code[i]).getValue(), false), Token.class.cast(code[i]).getValue()));
             }
         }
-
-        if(flag){
-            this.assemblerUnit.add(new LineStatement(this.numberOfLine+1, label, inst, comment, parser.getTypeEBNF()));
-            return true;
-        }
-        else{
-            this.assemblerUnit.add(new Error<>(cnt, Arrays.toString(code)));
-            return false;
-        }
+        return true;
     }
 
-    /**
-     * Creates an instruction based on opcode
-     * @param code
-     * @return
-     */
-    private Instruction checkDictionary(Vertex<?> code){
-        if(
-            (code.getKey().equals(FORMAT.OPCODEINHERENT) || 
-            code.getKey().equals(FORMAT.OPCODERELATIVE) ||
-            code.getKey().equals(FORMAT.OPCODEIMMEDIATE) )
-        && this.dictMap.containsKey(Token.class.cast(code).getValue()) )
-        {
-            return new Instruction(this.dictMap.get(Token.class.cast(code).getValue()), Token.class.cast(code).getValue(), this.parser.getTypeEBNF());
-        }
-        return null;
-    }
 
     public int getNumberOfLine() {
         return numberOfLine;

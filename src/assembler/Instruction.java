@@ -24,10 +24,12 @@ public class Instruction extends Node{
     }
 
     public Instruction(Node opcode, Node operand, String type){
-
         this.opcode = opcode;
 
-        this.setOperand(operand);
+        if(operand != null)
+            this.setOperand(operand);
+        else
+            this.value = opcode.getValue();
 
         this.typeEBNF = type;
         
@@ -35,7 +37,7 @@ public class Instruction extends Node{
 
     public void setOpcode(Node opcode) {
         this.opcode = opcode;
-        
+   
     }
     /**
      * Sets an operand in a instruction line. If operand is immediate or relative, perform operation on binary value
@@ -49,11 +51,17 @@ public class Instruction extends Node{
             this.operand.getValue().setFormat(Integer.parseInt( String.valueOf(temp[1].charAt(1)) ));
             this.operand.getValue().setSigned(String.valueOf(temp[1].charAt(0)));
         }
-        if(this.typeEBNF.equals(EBNF.RELATIVE.name()) || this.typeEBNF.equals(EBNF.RELATIVE1.name()) || this.typeEBNF.equals(EBNF.RELATIVE2.name()))
+        if(this.typeEBNF.equals(EBNF.RELATIVE.name()) || this.typeEBNF.equals(EBNF.RELATIVE1.name()) || this.typeEBNF.equals(EBNF.RELATIVE2.name()) || this.typeEBNF.equals(EBNF.RELATIVE3.name())){
+            // this.value.setFormat(this.operand.getValue().getFormat() + this.value.getFormat());
             this.value = this.value.concat(operand.getValue());
+        }
     
         else
             this.value = opcode.getValue().add(operand.getValue());
+    }
+
+    public Node getOperand() {
+        return operand;
     }
 
     public String getTypeEBNF() {
