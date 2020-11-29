@@ -3,22 +3,28 @@
  dup
  exit
  ret
- not Label
+ not
  and
- Label
- xor
- neg
+Labe;l ;532413465
+;;
+ xor ;sfsdfsdfs
+ neg ;sdfsdfds
  inc
- dec
+ dec 
+Loop add
  add
- sub
+ sub ;fdgfgg
+ ;gfgfgfgfg
+ ;gfgfgfgfg
  mul
  div 
- rem
+ ;dsfsdfdf
+ rem ;add something
  shl
  shr
  teq
  tne
+ ldv.u8 3
  tlt
  tgt
  tle 

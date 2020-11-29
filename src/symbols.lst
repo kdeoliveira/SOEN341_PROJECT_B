@@ -1,4 +1,4 @@
 Label List #2
-#	Memory Address	Machine Code	Hex	Label
-1	00000111	00000111	07	Labe
-2	00001101	00001101	0D	Loop
+#	Memory Address	Machine Code	Label
+8	00000111	00000111	07	Labe
+13	00001100	00001100	0C	Loop
