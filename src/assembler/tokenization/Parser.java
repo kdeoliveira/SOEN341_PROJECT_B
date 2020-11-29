@@ -3,7 +3,6 @@ package assembler.tokenization;
 import java.util.*;
 
 import assembler.Vertex;
-import util.BinaryAddress;
 import assembler.Comment;
 import assembler.Error;
 import assembler.Instruction;
