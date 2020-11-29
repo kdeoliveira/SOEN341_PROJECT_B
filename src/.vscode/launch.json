@@ -1,0 +1,170 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - EBNF",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.EBNF",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BinaryAddress",
+            "request": "launch",
+            "mainClass": "util.BinaryAddress",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BinarySearchTree",
+            "request": "launch",
+            "mainClass": "util.BinarySearchTree",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Lexer",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Lexer",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Parser",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Parser",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - cma",
+            "request": "launch",
+            "mainClass": "cma",
+            "projectName": "src",
+            "args": "-v input.asm"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Demo",
+            "request": "launch",
+            "mainClass": "Demo",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - ReadLine",
+            "request": "launch",
+            "mainClass": "util.ReadLine",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BinaryAddress",
+            "request": "launch",
+            "mainClass": "util.BinaryAddress",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Parser",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Parser",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SEMANTIC",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.SEMANTIC",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Lexer",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.Lexer",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TYPE",
+            "request": "launch",
+            "mainClass": "assembler.tokenization.TYPE",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Demo",
+            "request": "launch",
+            "mainClass": "Demo",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - ReadLine",
+            "request": "launch",
+            "mainClass": "util.ReadLine",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TrinarySearchTree",
+            "request": "launch",
+            "mainClass": "util.TrinarySearchTree",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Test<src_aae217a>",
+            "request": "launch",
+            "mainClass": "Test",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-BinaryAddress<src_aae217a>",
+            "request": "launch",
+            "mainClass": "binaryutil.BinaryAddress",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ReadOpcodes<src_aae217a>",
+            "request": "launch",
+            "mainClass": "binaryutil.ReadOpcodes",
+            "projectName": "src_aae217a",
+            "args": "binaryutil/file.txt"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-TripleSearchTree<src_aae217a>",
+            "request": "launch",
+            "mainClass": "binaryutil.TripleSearchTree",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Instruction<src_aae217a>",
+            "request": "launch",
+            "mainClass": "instruction.Instruction",
+            "projectName": "src_aae217a"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Opcode<src_aae217a>",
+            "request": "launch",
+            "mainClass": "instruction.Opcode",
+            "projectName": "src_aae217a"
+        }
+    ]
+}
