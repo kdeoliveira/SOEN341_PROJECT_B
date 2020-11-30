@@ -12,14 +12,16 @@ public class BinarySearchTree<K extends Comparable<K>> implements Map<K, BinaryA
     private class Node {
         private K key; // sorted by key
         private BinaryAddress val; // associated data
+        private boolean onlyLabels;
         private Node left;
         private Node right; // left and right subtrees
         private int size; // number of nodes in subtree
 
-        public Node(K key, BinaryAddress val, int size) {
+        public Node(K key, BinaryAddress val, boolean onlyLabels, int size) {
             this.key = key;
             this.val = val;
             this.size = size;
+            this.onlyLabels = onlyLabels;
         }
     }
 
@@ -121,6 +123,22 @@ public class BinarySearchTree<K extends Comparable<K>> implements Map<K, BinaryA
             return x.val;
     }
 
+    public boolean isOnlyLabels(K key){
+        return checkForLabels(root, key);
+    }
+
+    private boolean checkForLabels(Node x, K key){
+        if(key == null)     throw new IllegalArgumentException("call checkForLabels() with a null key");
+        if(x == null)       throw new NoSuchElementException("No element found with key: "+key);
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0)
+            return checkForLabels(x.left, key);
+        else if (cmp > 0)
+            return checkForLabels(x.right, key);
+        else
+            return x.onlyLabels;
+    }
+
     public BinaryAddress put(K key, BinaryAddress val) {
         if (key == null)
             throw new IllegalArgumentException("calls put() with a null key");
@@ -132,8 +150,20 @@ public class BinarySearchTree<K extends Comparable<K>> implements Map<K, BinaryA
     }
 
     private Node put(Node x, K key, BinaryAddress val) {
-        if (x == null)
-            return new Node(key, val, 1);
+        if (x == null){
+            if(key.toString().contains("*")){
+                if(key instanceof CharSequence){
+                    @SuppressWarnings("unchecked")
+                    K k = (K) key.toString().replace("*", "");
+                    return new Node(k , val, true, 1);
+                }
+                else{
+                    return new Node(key , val, false, 1);
+                }
+            }
+            else
+                return new Node(key, val, false, 1);
+        }
         int cmp = key.compareTo(x.key);
         if (cmp < 0)
             x.left = put(x.left, key, val);
@@ -242,14 +272,14 @@ public class BinarySearchTree<K extends Comparable<K>> implements Map<K, BinaryA
     public static void main(String[] args) {
         Map<String,BinaryAddress> instructions = new BinarySearchTree<>();
 
-        String[] a = { "ldv", "halt", "trap", "add" };
+        String[] a = { "ldv*", "halt", "trap", "add" };
         int[] add = { 0x44, 0x33, 0x55, 0x40 };
 
         for (int i = 0; i < a.length; i++) {
             instructions.put(a[i], new BinaryAddress(add[i]));
         }
 
-        System.out.println(instructions.get("add"));
+        System.out.println(((BinarySearchTree<String>) instructions).isOnlyLabels("ldv"));
     }
 
 }

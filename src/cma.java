@@ -42,7 +42,7 @@ public class cma {
     }
 
     
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
         IListing       cmaListing  = cmaFactory.makeListing();
         IAdministrator admin       = cmaFactory.makeAdmin(args);
 

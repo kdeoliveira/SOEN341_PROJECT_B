@@ -3,7 +3,7 @@ package util;
 public class BinaryAddress {
     
     private long binaryAddress;
-    private boolean signed = false;
+    private boolean signed = true;
     private int format;
     private char[] hexCode;
 
@@ -27,7 +27,7 @@ public class BinaryAddress {
     }
     public BinaryAddress(long hex){
         this.binaryAddress = hex;        
-        this.signed = false;
+        this.signed = true;
         this.hexCode = this.convertHex(this.binaryAddress);
         //max bits a node can have
         this.format = 32;

@@ -1,0 +1,17 @@
+#	Memory Address	Machine Code	Mnemonic
+1	0000		90		ldc.i3 0	
+2	0001		02		dup 	
+3	0002		A8		stv.u3 0	
+4	0003		A9		stv.u3 1	
+5	0004		A0	Loop	ldv.u3  	
+6	0005		D90A		ldc.i8 10	
+7	0006		1C		tlt 	
+8	0007		50	Done	brf.i5  	
+9	0008		A1		ldv.u3 1	
+10	0009		A0		ldv.u3 0	
+11	000A		13		add 	
+12	000B		A9		stv.u3 1	
+13	000C		B300		incv.u8 0	
+14	000D		30	Loop	br.i5  	
+15	000E		000E		Done	
+16	000F		00		halt 	

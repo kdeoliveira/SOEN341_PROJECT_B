@@ -7,9 +7,10 @@ import assembler.Vertex;
  * Eventually change CharSequence implementation to another more preferrable
  */
 public class Token implements Vertex<FORMAT>{
-    private final FORMAT key;
     private static final long serialVersionUID = 760703066967345L;
+    private final FORMAT key;
     private Node value;
+    private boolean parameters = false;
 
     public Token(FORMAT type, Node data){
         this.key = type;
@@ -21,6 +22,12 @@ public class Token implements Vertex<FORMAT>{
         this.value = new Node(0, data);
     }
 
+    public Token(FORMAT type, Node data, boolean parameters){
+        this.key = type;
+        this.value = data;
+        this.parameters = parameters;
+    }
+
     public FORMAT getKey() {
         return this.key;
     }
@@ -28,6 +35,10 @@ public class Token implements Vertex<FORMAT>{
 
     public Node getValue() {
         return this.value;
+    }
+
+    public boolean hasParameters(){
+        return this.parameters;
     }
 
     @Override

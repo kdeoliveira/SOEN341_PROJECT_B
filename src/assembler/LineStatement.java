@@ -11,6 +11,7 @@ public class LineStatement{
 	private int lineNumber;
 	private BinaryAddress machineCode;
 	private String typeEBNF;
+	private boolean onlyLabels = false;
 
 	/**
 	 * Generates a line of statement based on Nodes and Comment
@@ -49,6 +50,9 @@ public class LineStatement{
 	public Node getLabel() {
 		return label;
 	}
+	public boolean hasOnlyLabels(){
+		return onlyLabels;
+	}
 	public void setLabel(Node label) {
 		this.label = label;
 		// this.label.setValue(new BinaryAddress((long) this.lineNumber, 16));
@@ -56,8 +60,9 @@ public class LineStatement{
 	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
-	public void setInstruction(Instruction instruction) {
+	public void setInstruction(Instruction instruction, boolean onlyLabels) {
 		this.instruction = instruction;
+		this.onlyLabels = onlyLabels;
 	}
 	public void setMachineCode(BinaryAddress machineCode) {
 		this.machineCode = machineCode;

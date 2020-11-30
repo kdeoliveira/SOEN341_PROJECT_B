@@ -1,31 +1,18 @@
 #	Memory Address	Machine Code	Mnemonic
-1	0000		00		halt 	
-2	0001		01		pop 	
-3	0002		02		dup 	
-4	0003		03		exit 	
-5	0004		04		ret 	
-6	0005		0C		not 	
-7	0006		0D		and 	
-8	0007		0007		Labe	
-9	0008		0F		xor 	
-10	0009		10		neg 	
-11	000A		11		inc 	
-12	000B		12		dec 	
-13	000C		13		Loop	add 	
-14	000D		13		add 	
-15	000E		14		sub 	
-16	000F		15		mul 	
-17	0010		16		div 	
-18	0011		17		rem 	
-19	0012		18		shl 	
-20	0013		61		.cstring a	
-21	0014		1A		teq 	
-22	0015		1B		tne 	
-23	0016		91		ldc.i3 1	
-24	0017		B1000C		ldv.u8 Loop	
-25	0018		1C		tlt 	
-26	0019		DB000009FB		ldc.i32 2555	
-27	001A		1D		tgt 	
-28	001B		1E		tle 	
-29	001C		1F		tge 	
-30	001D		00		halt 	
+1	0000		90		ldc.i3 0	
+2	0001		02		dup 	
+3	0002		A8		stv.u3 0	
+4	0003		A9		stv.u3 1	
+5	0004		A3	Loop	ldv.u3 3 	
+6	0005		D90A		ldc.i8 10	
+7	0006		1C		tlt 	
+8	0007		5F		brf.i5 Done	
+9	0008		A1		ldv.u3 1	
+10	0009		62		.cstring b	
+11	000A		A0		ldv.u3 0	
+12	000B		13		add 	
+13	000C		A9		stv.u3 1	
+14	000D		B300		incv.u8 0	
+15	000E		2E		br.i5 -2	
+16	000F		F		Done	
+17	0010		00		halt 	

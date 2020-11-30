@@ -42,27 +42,33 @@ public class Parser implements Parsable{
         {
             for(int i=0 ; i<type.size(); i++){
                 if(type.get(i).equals(FORMAT.LABEL)){
-                    if( (typeEBNF.equals(EBNF.RELATIVE1.name()) || typeEBNF.equals(EBNF.RELATIVE3.name())) && i > 0)
+                    
+                    if(i > 0){
+                        if(!this.iLineStatement.hasOnlyLabels()){
+                            this.returnValueObjects.add(new Error<Integer>(0, List.of(object), "Semantic does not match any valid EBNF format"));
+                            return false;
+                        }    
                         this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
-                    else
+                    }
+                    else{
+                        System.out.println("Index: "+i+object[i]);
                         this.iLineStatement.setLabel(Token.class.cast(object[i]).getValue());
+                    }
                 }
 
                 if(type.get(i).equals(FORMAT.COMMENT))
                     this.iLineStatement.setComment(new Comment(Token.class.cast(object[i]).getValue().getKey()));
                 
                 if(type.get(i).equals(FORMAT.OPCODEINHERENT) || type.get(i).equals(FORMAT.OPCODERELATIVE) || type.get(i).equals(FORMAT.OPCODEIMMEDIATE))
-                    this.iLineStatement.setInstruction(new Instruction(Token.class.cast(object[i]).getValue(), null, typeEBNF));
+                    this.iLineStatement.setInstruction(new Instruction(Token.class.cast(object[i]).getValue(), null, typeEBNF), Token.class.cast(object[i]).hasParameters());
                 if(type.get(i).equals(FORMAT.DIRECTIVE))
-                    this.iLineStatement.setInstruction(new Instruction(new BinaryAddress(0), Token.class.cast(object[i]).getValue().getKey(), typeEBNF));
+                    this.iLineStatement.setInstruction(new Instruction(new BinaryAddress(0), Token.class.cast(object[i]).getValue().getKey(), typeEBNF), Token.class.cast(object[i]).hasParameters());
                 if(type.get(i).equals(FORMAT.STRINGOPERAND))
                     this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
                 if(type.get(i).equals(FORMAT.OPERAND))
                     this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
                 
             }
-         
-         
             
             this.iLineStatement.setTypeEBNF(typeEBNF);
 
@@ -72,7 +78,7 @@ public class Parser implements Parsable{
             return true;
         }
         else{
-            this.returnValueObjects.add(new Error<Integer>(1, Arrays.toString(object)));
+            this.returnValueObjects.add(new Error<Integer>(1, List.of(object), "Invalid lexical syntax"));
             return false;
         }
     }

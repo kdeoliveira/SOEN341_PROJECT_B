@@ -6,7 +6,7 @@ import java.util.regex.*;
 import assembler.Error;
 import assembler.Node;
 import assembler.Operand;
-import util.BinaryAddress;
+import util.*;
 
 public class Lexer implements Lexical{
     private List<CharSequence> tokens;
@@ -84,20 +84,28 @@ public class Lexer implements Lexical{
                         this.generateError(null, in);                        
                         return in.length();
                     }
-                    if(x == FORMAT.COMMENT)
-                        tokens.add(new Token(x, in));
-                    if(x == FORMAT.STRINGOPERAND)
-                        tokens.add(new Token(x, new Node((int) in.charAt(0) ,in)));
-                    if(x == FORMAT.DIRECTIVE)
-                        tokens.add(new Token(x, in));
-                    if(x == FORMAT.LABEL)
-                        tokens.add(new Token(x, new Node(0, in)));
-                    
-                    if(x == FORMAT.OPERAND){
-                        tokens.add(new Token(x, new Operand(Integer.valueOf(in), in)));
+                    if(!this.dictMap.containsKey(in)){
+                        if(x == FORMAT.COMMENT)
+                            tokens.add(new Token(x, in));
+                        if(x == FORMAT.STRINGOPERAND)
+                            tokens.add(new Token(x, new Node((int) in.charAt(0) ,in)));
+                        if(x == FORMAT.DIRECTIVE)
+                            tokens.add(new Token(x, in));
+                        if(x == FORMAT.LABEL)
+                            tokens.add(new Token(x, new Node(0, in)));
+                        
+                        if(x == FORMAT.OPERAND){
+                            tokens.add(new Token(x, new Operand(Integer.valueOf(in), in)));
+                        }
+                    }else{
+                        
+                        if(x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE){
+
+                            tokens.add(new Token(x, new Node(this.dictMap.get(in), in), ((BinarySearchTree<String>) this.dictMap).isOnlyLabels(in) ));
+                        }
+                        else
+                            tokens.add(new Token(FORMAT.OPCODERELATIVE, new Node(this.dictMap.get(in), in), ((BinarySearchTree<String>) this.dictMap).isOnlyLabels(in) ));
                     }
-                    if(x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE)
-                        tokens.add(new Token(x, new Node(this.dictMap.get(in), in)));
                 }
             }            
         }else{
@@ -117,10 +125,10 @@ public class Lexer implements Lexical{
         try{
             if(matcher == null) throw new IllegalStateException();
             this.tokenPosition = matcher.end() + this.tokenLength;
-            this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,input.substring(0, matcher.end())+"["+input.substring(matcher.end())+"]")));
+            this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,input.substring(0, matcher.end())+"["+input.substring(matcher.end())+"]"), "Invalid lexical syntax"));
         }catch(IllegalStateException e){
             this.tokenPosition = this.tokenLength + 1;
-            this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,"["+input+"]")));
+            this.tokens.add(new Error<Integer>(this.tokenPosition, new Token(null,"["+input+"]"), "Invalid lexical syntax" ));
         }
     }
     

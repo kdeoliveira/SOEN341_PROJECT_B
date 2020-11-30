@@ -61,7 +61,7 @@ public class Engine {
 	    	if(!parser.parse(code)) {
 	            
 	            if(parser.getReturnValueObjects() == null)
-	                this.assemblerUnit.add(new Error<Integer>(0, "Incorrect format"));
+	                this.assemblerUnit.add(new Error<Integer>(0, "Unknown", "Incorrect format"));
 	            else{
 	                for(CharSequence x : parser.getReturnValueObjects())
 	                    this.assemblerUnit.add(x);
@@ -70,8 +70,12 @@ public class Engine {
 	        }
 	    	parser.getLineStatement().checkBinaryValue(this.numberOfLine + 1);
         } 
+        catch (IllegalArgumentException e) {
+        	this.assemblerUnit.add(new Error<Integer>(this.numberOfLine + 1, parser.getReturnValueObjects() ,e.getMessage()));
+        	return false;
+        }
         catch (Exception e) {
-        	this.assemblerUnit.add(new Error<Integer>(0, " Operand out of bounds"));
+        	this.assemblerUnit.add(new Error<Integer>(this.numberOfLine + 1, parser.getReturnValueObjects(), "Operand out of bounds"));
         	return false;
         }
         

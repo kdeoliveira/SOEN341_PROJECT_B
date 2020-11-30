@@ -23,8 +23,8 @@ tlt         0x1C Test for less than
 tgt         0x1D Test for greater than
 tle         0x1E Test for less or equal
 tge         0x1F Test for greater or equal
-br.i5       0x30 Branch always
-brf.15      0x50 Branch if v != 1
+br.i5*       0x30 Branch always
+brf.i5*      0x50 Branch if v != 1
 enter.u5    0x70 Set up frame
 ldc.i3      0x90 Load constant
 addv.u3     0x98 Add TOS to variable
@@ -40,8 +40,8 @@ lda.i16     0xD5 Load address
 ldc.i8      0xD9 Load an 8-bit constant
 ldc.i16     0xDA Load a 16-bit constant
 ldc.i32     0xDB Load a 32-bit constant
-br.i8       0xE0 Branch relative always
-br.i16      0xE1 Branch relative always
-brf.i8      0xE3 Branch relative if false
-call.i16    0xE7 Call relative
+br.i8*       0xE0 Branch relative always
+br.i16*      0xE1 Branch relative always
+brf.i8*      0xE3 Branch relative if false
+call.i16*    0xE7 Call relative
 trap        0xFF Trap to vector
