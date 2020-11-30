@@ -27,14 +27,9 @@ public class LineStatement{
 		this.lineNumber = lineNumber;
 		this.label = label;
 		this.instruction = (Instruction) instruction;
-		if(this.instruction == null && this.label != null)
-			this.machineCode = this.label.getValue();
-		else if(this.instruction == null)
-			this.machineCode = new BinaryAddress(0x0);
-		else
-			this.machineCode = this.instruction.getValue();
 		this.comment = comment;
 		this.typeEBNF = type;
+		this.checkBinaryValue(lineNumber);
 	}
 	public LineStatement ()
 	{
@@ -56,6 +51,7 @@ public class LineStatement{
 	}
 	public void setLabel(Node label) {
 		this.label = label;
+		// this.label.setValue(new BinaryAddress((long) this.lineNumber, 16));
 	}
 	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
@@ -76,22 +72,31 @@ public class LineStatement{
 	}
 
 	public void setOperand(Node operand){
-		if(this.instruction != null)
-			this.instruction.setOperand(operand);
+		if(this.instruction == null)	return;
+		this.instruction.setOperand(operand);
 	}
 
 	public boolean hasInstruction(){
 		return this.instruction != null;
 	}
 
-	public void checkBinaryValue(int lineNumber){
-		this.lineNumber = lineNumber;
-		if(label != null)
-			label.setValue(new BinaryAddress(this.lineNumber-1));
+	public void checkBinaryValue(){
 		if(this.instruction == null && this.label != null)
 			this.machineCode = this.label.getValue();
 		else if(this.instruction == null)
-			this.machineCode = new BinaryAddress(0x0);
+			this.machineCode = new BinaryAddress(0x0, 8);
+		else
+			this.machineCode = this.instruction.getValue();
+	}
+
+	public void checkBinaryValue(int lineNumber){
+		this.lineNumber = lineNumber;
+		if(label != null)
+			label.setValue(new BinaryAddress((long) this.lineNumber-1, 16));
+		if(this.instruction == null && this.label != null)
+			this.machineCode = this.label.getValue();
+		else if(this.instruction == null)
+			this.machineCode = new BinaryAddress(0x0, 8);
 		else
 			this.machineCode = this.instruction.getValue();
 	}

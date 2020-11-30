@@ -1,8 +1,10 @@
 package assembler.tokenization;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import assembler.Vertex;
+import util.BinaryAddress;
 import assembler.Comment;
 import assembler.Error;
 import assembler.Instruction;
@@ -34,10 +36,10 @@ public class Parser implements Parsable{
         if(type.size() > 1)
             type.removeIf(n -> n == FORMAT.COMMENT);
 
+        // System.out.println(Arrays.toString(object));
+
         if(this.internalParser(type.toArray(new FORMAT[0])))
         {
-            
-
             for(int i=0 ; i<type.size(); i++){
                 if(type.get(i).equals(FORMAT.LABEL)){
                     if( (typeEBNF.equals(EBNF.RELATIVE1.name()) || typeEBNF.equals(EBNF.RELATIVE3.name())) && i > 0)
@@ -51,6 +53,10 @@ public class Parser implements Parsable{
                 
                 if(type.get(i).equals(FORMAT.OPCODEINHERENT) || type.get(i).equals(FORMAT.OPCODERELATIVE) || type.get(i).equals(FORMAT.OPCODEIMMEDIATE))
                     this.iLineStatement.setInstruction(new Instruction(Token.class.cast(object[i]).getValue(), null, typeEBNF));
+                if(type.get(i).equals(FORMAT.DIRECTIVE))
+                    this.iLineStatement.setInstruction(new Instruction(new BinaryAddress(0), Token.class.cast(object[i]).getValue().getKey(), typeEBNF));
+                if(type.get(i).equals(FORMAT.STRINGOPERAND))
+                    this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
                 if(type.get(i).equals(FORMAT.OPERAND))
                     this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
                 
@@ -79,7 +85,6 @@ public class Parser implements Parsable{
     private boolean internalParser(FORMAT[] cmp){
         for(int i = 0 ; i < this.semantic.length ; i++)
         {
-            
             if(Arrays.equals(this.semantic[i].getType(), cmp))
             {
                 this.typeEBNF = this.semantic[i].name();

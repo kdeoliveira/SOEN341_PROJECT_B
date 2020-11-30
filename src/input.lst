@@ -6,7 +6,7 @@
 5	0004		04		ret 	
 6	0005		0C		not 	
 7	0006		0D		and 	
-8	0007		07		Labe	
+8	0007		0007		Labe	
 9	0008		0F		xor 	
 10	0009		10		neg 	
 11	000A		11		inc 	
@@ -18,12 +18,14 @@
 17	0010		16		div 	
 18	0011		17		rem 	
 19	0012		18		shl 	
-20	0013		19		shr 	
+20	0013		61		.cstring a	
 21	0014		1A		teq 	
 22	0015		1B		tne 	
-23	0016		B103		ldv.u8 3	
-24	0017		1C		tlt 	
-25	0018		1D		tgt 	
-26	0019		1E		tle 	
-27	001A		1F		tge 	
-28	001B		00		halt 	
+23	0016		91		ldc.i3 1	
+24	0017		B1000C		ldv.u8 Loop	
+25	0018		1C		tlt 	
+26	0019		DB000009FB		ldc.i32 2555	
+27	001A		1D		tgt 	
+28	001B		1E		tle 	
+29	001C		1F		tge 	
+30	001D		00		halt 	

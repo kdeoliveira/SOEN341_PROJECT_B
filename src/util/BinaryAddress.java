@@ -2,7 +2,7 @@ package util;
 
 public class BinaryAddress {
     
-    private int binaryAddress;
+    private long binaryAddress;
     private boolean signed = false;
     private int format;
     private char[] hexCode;
@@ -25,21 +25,29 @@ public class BinaryAddress {
         this.format = 8;
         this.checkSignedBinary();
     }
-    public BinaryAddress(int hex){
+    public BinaryAddress(long hex){
         this.binaryAddress = hex;        
         this.signed = false;
         this.hexCode = this.convertHex(this.binaryAddress);
-        this.format = 8;
+        //max bits a node can have
+        this.format = 32;
         this.checkSignedBinary();
     }
-    public BinaryAddress(int hex, boolean signed){
+    public BinaryAddress(long hex, boolean signed){
         this.binaryAddress = hex;        
         this.signed = signed;
         this.hexCode = this.convertHex(this.binaryAddress);
         this.format = 8;
         this.checkSignedBinary();
     }
-    public BinaryAddress(int hex, boolean signed, int range){
+    public BinaryAddress(long hex, int range){
+        this.binaryAddress = hex;        
+        this.signed = false;
+        this.hexCode = this.convertHex(this.binaryAddress);
+        this.format = range;
+        this.checkSignedBinary();
+    }
+    public BinaryAddress(long hex, boolean signed, int range){
         //CHeck for negatives as well
         this.binaryAddress = hex;        
         this.signed = signed;
@@ -57,7 +65,7 @@ public class BinaryAddress {
         return hexCode != null ? this.hexFormat(hexCode) : null;
     }
 
-    public int getBinaryAddress(){
+    public long getBinaryAddress(){
         return this.binaryAddress;
     }
 
@@ -73,8 +81,8 @@ public class BinaryAddress {
         return this.signed;
     }
 
-    private char[] convertHex(int binary){
-        return Integer.toHexString(binary).toCharArray();
+    private char[] convertHex(long binary){
+        return Long.toHexString(binary).toCharArray();
     }
 
     public void setSigned(boolean signed) {
@@ -102,12 +110,11 @@ public class BinaryAddress {
         if(this.signed){
             int lowBound = (int) (Math.pow(2, this.format)/2 ) * -1;
             int upperBound = (int) (Math.pow(2, this.format)/2 ) - 1;
-
             if(!(this.binaryAddress <= upperBound && this.binaryAddress >= lowBound))
                 throw new UnsupportedOperationException();
         }else
-            if(this.binaryAddress < 0 || this.binaryAddress > (int) Math.pow(2, this.format) - 1){
-                System.out.println("**"+Integer.toHexString(binaryAddress)+"  "+format);
+            if(this.binaryAddress < 0 || this.binaryAddress > (long) Math.pow(2, this.format) - 1){
+                System.out.println("BinaryAddress.java: "+binaryAddress);
                 throw new UnsupportedOperationException();
             }
             
@@ -136,8 +143,8 @@ public class BinaryAddress {
         return str.toString().toUpperCase();
     }
 
-    private String toBinaryFormat(int binary){
-        StringBuilder str = new StringBuilder(Integer.toBinaryString(binary));
+    private String toBinaryFormat(long binary){
+        StringBuilder str = new StringBuilder(Long.toBinaryString(binary));
 
 
         int bits = 0;
@@ -194,7 +201,7 @@ public class BinaryAddress {
     public BinaryAddress concat(BinaryAddress x){
         // System.out.println("--->"+Integer.toHexString(binaryAddress)+"+"+x.binaryAddress+"\t"+format+"+"+x.format);
         // System.out.println("Result--->"+Integer.toHexString((this.binaryAddress << x.format) + (x.binaryAddress & 0xff)));
-        return new BinaryAddress(((this.binaryAddress << 8) + (x.binaryAddress & 0xff)), false, 16);
+        return new BinaryAddress(((this.binaryAddress << x.format) + (x.binaryAddress)), false, (this.format+x.format));
     }
 
 

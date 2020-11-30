@@ -69,7 +69,9 @@ public class Lexer implements Lexical{
         if(matcher.find() && matcher.end() == in.length()){
             for(FORMAT x : FORMAT.values())
             {
+                
                 if(matcher.group(x.name()) != null){
+                    // System.out.println(in+"--->"+x);
                     if(
                     (   (x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE)
                     && (!this.dictMap.containsKey(in) || cnt == 0)    )
@@ -82,13 +84,18 @@ public class Lexer implements Lexical{
                         this.generateError(null, in);                        
                         return in.length();
                     }
-                    if(x == FORMAT.COMMENT){
-                        tokens.add(new Token(x, new Node(0, in)));
-                    }
+                    if(x == FORMAT.COMMENT)
+                        tokens.add(new Token(x, in));
+                    if(x == FORMAT.STRINGOPERAND)
+                        tokens.add(new Token(x, new Node((int) in.charAt(0) ,in)));
+                    if(x == FORMAT.DIRECTIVE)
+                        tokens.add(new Token(x, in));
                     if(x == FORMAT.LABEL)
                         tokens.add(new Token(x, new Node(0, in)));
-                    if(x == FORMAT.OPERAND)
+                    
+                    if(x == FORMAT.OPERAND){
                         tokens.add(new Token(x, new Operand(Integer.valueOf(in), in)));
+                    }
                     if(x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE)
                         tokens.add(new Token(x, new Node(this.dictMap.get(in), in)));
                 }

@@ -87,11 +87,16 @@ public class Engine {
 
     public boolean pass2(){
         if(this.assemblerUnit.sizeLineStatement() == 0 || this.assemblerUnit.sizeLabel() == 0)  return false;
-        for(int i =0; i < assemblerUnit.sizeLabel(); i++){
+        for(int i =0; i < assemblerUnit.sizeLineStatement(); i++){
+
             for(int j=0; j < assemblerUnit.sizeLabel() ; j++){
-                if(assemblerUnit.getLineStatements(j).getLabel() != null && assemblerUnit.getLineStatements(j).getLabel() == assemblerUnit.getLabel(i)){
-                    this.assemblerUnit.getLineStatements(j).getInstruction().setOperand(assemblerUnit.getLabel(i));
+                if(assemblerUnit.getLineStatements(i).getOperand() != null && assemblerUnit.getLabel(j).getKey().equals(assemblerUnit.getLineStatements(i).getOperand().getKey())){
+                    assemblerUnit.getLineStatements(i).getInstruction().setOperand(
+                        assemblerUnit.getLabel(j)
+                    );
+                    assemblerUnit.getLineStatements(i).checkBinaryValue();
                 }
+
             }
         }
         return true;

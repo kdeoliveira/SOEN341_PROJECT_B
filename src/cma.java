@@ -36,7 +36,7 @@ public class cma {
         for(int i = 0; i < eng.getAssemblerUnit().sizeLineStatement() ; i++){
             System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode());
             
-            file.write(eng.getAssemblerUnit().getLineStatements(i).getMachineCode().getBinaryAddress());
+            file.write((int)eng.getAssemblerUnit().getLineStatements(i).getMachineCode().getBinaryAddress());
         }
         System.out.println();
     }
@@ -99,8 +99,9 @@ public class cma {
                     if(!eng.assemble(x))
                         break;
                 }
+                eng.pass2();
 
-                // eng.pass2();
+                
 
                 printBinaryCode(eng, executable);
                 
@@ -114,6 +115,7 @@ public class cma {
                     
                     admin.outputln("cma: Closing '" + filename + "'");  
                 }
+
                 
                 System.setOut(stream);
                 printLines(eng);
@@ -124,6 +126,7 @@ public class cma {
                 System.setOut(errors);            
                 printErrors(eng);
                 
+
             }
             catch(IOException e)
             {

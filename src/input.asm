@@ -21,11 +21,13 @@ Loop add
  ;dsfsdfdf
  rem ;add something
  shl
- shr
+ .cstring a
  teq
  tne
- ldv.u8 3
+ ldc.i3 1
+ ldv.u8 Loop
  tlt
+ ldc.i32 2555
  tgt
  tle 
  tge 
