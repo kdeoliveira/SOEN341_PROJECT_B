@@ -11,12 +11,16 @@ import util.*;
 public class cma {
 
     public static void printLines(Engine eng){
-        System.out.println("#\tMemory Address\tMachine Code\tMnemonic");
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("#  |\tMemory Address\tMachine Code\tLabel\tMnemonic\tOperand |");
+        System.out.println("-------------------------------------------------------------------------");
         for(int i = 0; i < eng.getAssemblerUnit().getNumberOfLines() ; i++){
-            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+"\t"+new BinaryAddress(i, false, 16).getHexCode()+"\t\t"+
+            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+(eng.getAssemblerUnit().getLineStatements(i).getLineNumber() > 9 ? " |": "  |")+
+            "\t"+new BinaryAddress(i, false, 16).getHexCode()+"\t\t"+
             eng.getAssemblerUnit().getLineStatements(i)
             );
         }
+        System.out.println("-------------------------------------------------------------------------");
     }
     public static void printSymbols(Engine eng){
         System.out.println("Label List #"+eng.getAssemblerUnit().sizeLabel());

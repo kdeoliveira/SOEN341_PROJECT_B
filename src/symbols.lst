@@ -1,4 +1,4 @@
 Label List #2
 #	Memory Address	Machine Code	Label
-5	0000000000000100	0000000000000100	0004	Loop
+5	00100	00100	4	Loop
 16	01111	01111	F	Done

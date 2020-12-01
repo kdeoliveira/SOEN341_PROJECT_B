@@ -18,8 +18,8 @@ public class Node implements Vertex<String>{
     }
 
     public Node(int hex, String name){
-        this.value = new BinaryAddress(hex);
         this.key = name;
+        this.value = new BinaryAddress(hex);
     }
     public Node(BinaryAddress hex, String name){
         this.key = name;

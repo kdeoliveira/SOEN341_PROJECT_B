@@ -87,8 +87,9 @@ public class Lexer implements Lexical{
                     if(!this.dictMap.containsKey(in)){
                         if(x == FORMAT.COMMENT)
                             tokens.add(new Token(x, in));
-                        if(x == FORMAT.STRINGOPERAND)
-                            tokens.add(new Token(x, new Node((int) in.charAt(0) ,in)));
+                        if(x == FORMAT.STRINGOPERAND){
+                            tokens.add(new Token(x, new Node(BinaryAddress.toBinary(in) ,in)));
+                        }
                         if(x == FORMAT.DIRECTIVE)
                             tokens.add(new Token(x, in));
                         if(x == FORMAT.LABEL)

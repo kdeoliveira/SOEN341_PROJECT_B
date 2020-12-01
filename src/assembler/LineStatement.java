@@ -12,6 +12,7 @@ public class LineStatement{
 	private BinaryAddress machineCode;
 	private String typeEBNF;
 	private boolean onlyLabels = false;
+	private static final int MAXBITS = 32;
 
 	/**
 	 * Generates a line of statement based on Nodes and Comment
@@ -131,20 +132,25 @@ public class LineStatement{
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
+		if(machineCode.getFormat() > MAXBITS){
+			str.append(this.machineCode.getHexCode().substring(0, 8)+"...");
+		}else
+			str.append(this.machineCode.getHexCode());
+		
 		if(this.label != null && typeEBNF.equals(EBNF.INHERENT2.name()))
-			str.append(String.format("%s\t\t%s\t%s", this.machineCode.getHexCode(), this.label.getKey(), this.instruction));
+			str.append(String.format("\t\t%s\t%s",this.label.getKey(), this.instruction));
 		else if(this.label != null && this.instruction != null){
-			str.append(String.format("%s\t%s\t%s ", this.machineCode.getHexCode(), this.label.getKey(), this.instruction));
+			str.append(String.format("\t\t%s\t%s ",this.label.getKey(), this.instruction));
 			
 
 		}
 		else if(this.instruction == null && this.label != null)
-			str.append(String.format("%s\t\t%s", this.machineCode.getHexCode(),label.getKey()));
+			str.append(String.format("\t\t%s",label.getKey()));
 		else
-			if(this.machineCode.getFormat() > 8)
-				str.append(String.format("%s\t\t%s", this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction));
+			if(this.machineCode.getFormat() > 16)
+				str.append(String.format("\t\t%s", this.instruction == null ? "" : this.instruction));
 			else
-				str.append(String.format("%s\t\t%s", this.machineCode.getHexCode(), this.instruction == null ? "" : this.instruction));
+				str.append(String.format("\t\t\t%s", this.instruction == null ? "" : this.instruction));
 		
 		return str.append(this.comment == null ? "" : "\t"+this.comment).toString();
 	}	

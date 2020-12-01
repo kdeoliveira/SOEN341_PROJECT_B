@@ -170,8 +170,11 @@ public class BinaryAddress {
      */
     public BinaryAddress add(BinaryAddress x){
         if(x == null)   return this;
-
-        return new BinaryAddress(this.binaryAddress + x.binaryAddress, false);
+        
+        if(x.signed){
+            return new BinaryAddress( (binaryAddress) + (x.binaryAddress & (int) Math.pow(2, x.format) - 1) , false, this.format);
+        }
+        return new BinaryAddress(this.binaryAddress + x.binaryAddress, false, Integer.max(format, x.format));
         
     }
 
@@ -182,8 +185,16 @@ public class BinaryAddress {
     public void plus(BinaryAddress x){
         if(x == null)   return;
 
-        this.binaryAddress += x.binaryAddress;
-        this.hexCode = this.convertHex(this.binaryAddress);
+        if(x.signed){
+            this.binaryAddress = (binaryAddress) + (x.binaryAddress & (int) Math.pow(2, x.format) - 1);
+            signed = false;
+            this.hexCode = this.convertHex(this.binaryAddress);
+        }
+        else{
+            this.binaryAddress += x.binaryAddress;
+            format = Integer.max(format, x.format);
+            this.hexCode = this.convertHex(this.binaryAddress);
+        }
     }
 
     /**
@@ -201,7 +212,22 @@ public class BinaryAddress {
     public BinaryAddress concat(BinaryAddress x){
         // System.out.println("--->"+Integer.toHexString(binaryAddress)+"+"+x.binaryAddress+"\t"+format+"+"+x.format);
         // System.out.println("Result--->"+Integer.toHexString((this.binaryAddress << x.format) + (x.binaryAddress & 0xff)));
-        return new BinaryAddress(((this.binaryAddress << x.format) + (x.binaryAddress)), false, (this.format+x.format));
+        return new BinaryAddress(((this.binaryAddress << x.format) + (x.binaryAddress & (int) Math.pow(2, x.format) - 1)), false, (this.format+x.format));
+    }
+
+    public static BinaryAddress toBinary(String str){
+        long result = 0;
+        int cnt = 1;
+        for(char x : str.toCharArray()){
+            if(x != '"'){
+                
+                result += (int) x;
+                
+                result = result << 8;
+                cnt++;
+            }
+        }
+        return new BinaryAddress(result,false, cnt*8);
     }
 
 
@@ -210,22 +236,23 @@ public class BinaryAddress {
         BinaryAddress mem = new BinaryAddress("0xBF", false);
         BinaryAddress mem1 = new BinaryAddress(-4, true, 3);
 
-        System.out.println(mem +"\t" + mem.getHexCode());
-        System.out.println(mem1 +"\t" + mem1.getHexCode());
-        System.out.println(mem.concat(mem1).getHexCode());
-        System.out.println();
-        mem.plus(mem1);
-        System.out.println("After plus: "+mem +"\t" + mem.getHexCode());
+        System.out.println(BinaryAddress.toBinary("Kevin").getHexCode());
 
-        System.out.println();
 
-        System.out.println("After add" + mem.add(mem1) +"\n" + mem.add(mem1).getHexCode());
+
+        // System.out.println(mem +"\t" + mem.getHexCode());
+        // System.out.println(mem1 +"\t" + mem1.getHexCode());
+        // System.out.println(mem.concat(mem1).getHexCode());
+        // System.out.println();
+        // mem.plus(mem1);
+        // System.out.println("After plus: "+mem +"\t" + mem.getHexCode());
+
+        // System.out.println();
+
+        // System.out.println("After add" + mem.add(mem1) +"\n" + mem.add(mem1).getHexCode());
         
-        System.out.println();
+        // System.out.println();
 
-        // -------------
-        System.out.println("Concat:");
-        System.out.println(mem.concat(mem1)+"\t"+mem1.concat(mem1).getHexCode());
 
     }
 

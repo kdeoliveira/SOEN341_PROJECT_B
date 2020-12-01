@@ -10,6 +10,7 @@ public class AssemblerUnit {
     private List<Node> labels;
     private List<Integer> labelsNumberOfLine;
     private List<CharSequence> errorList;
+    private static final int MAXBITS = 32;
 
     /**
      * Composite pattern for lineStatements and Errors

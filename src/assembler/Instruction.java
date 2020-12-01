@@ -51,11 +51,12 @@ public class Instruction extends Node{
             
             this.operand.getValue().setFormat(Integer.parseInt( String.valueOf(temp[1].substring(1)) ));
             this.operand.getValue().setSigned(String.valueOf(temp[1].charAt(0)));
-        }else{
-            //Default values
-            this.operand.getValue().setFormat(8);
-            this.operand.getValue().setSigned(false);
         }
+        // else{
+        //     //Default values
+        //     this.operand.getValue().setFormat(value.getFormat() + operand.getValue().getFormat());
+        //     this.operand.getValue().setSigned(false);
+        // }
 
         // System.out.println("Instruction.java --> "+
         // this.value+": "+this.value.getFormat()+" = "+
@@ -65,8 +66,9 @@ public class Instruction extends Node{
         if(this.typeEBNF.equals(EBNF.RELATIVE.name()) || this.typeEBNF.equals(EBNF.RELATIVE1.name()) || this.typeEBNF.equals(EBNF.RELATIVE2.name()) || this.typeEBNF.equals(EBNF.RELATIVE3.name())){
             this.value = this.value.concat(operand.getValue());
         }
-        else
+        else{
             this.value = opcode.getValue().add(operand.getValue());
+        }
 
     }
 
@@ -80,7 +82,13 @@ public class Instruction extends Node{
 
     @Override
     public String toString() {
-        return String.format("%s %s", this.opcode != null ? this.opcode.getKey() : "", this.operand != null ? this.operand.getKey() : "");
+        if(this.opcode != null && this.opcode.key.length() < 7)
+            return String.format("%s\t\t%s", this.opcode.getKey(), this.operand != null ? this.operand.getKey() : "");
+        else if(this.opcode != null && this.opcode.key.length() > 7)
+            return String.format("%s\t%s", this.opcode.getKey(), this.operand != null ? this.operand.getKey() : "");
+        else{
+            return String.format("\t\t%s", this.operand != null ? this.operand.getKey() : "");
+        }
     }
 
     public void setInstruction(Node opcode){

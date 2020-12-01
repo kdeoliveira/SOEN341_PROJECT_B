@@ -9,7 +9,7 @@ public enum FORMAT {
     LABEL("\\p{Upper}\\p{Lower}+"),
     OPERAND("-?\\d+"),
     COMMENT("[;].+"),
-    STRINGOPERAND("\\p{ASCII}");
+    STRINGOPERAND("\"\\p{ASCII}+\"");
 
     public final String pattern;
 

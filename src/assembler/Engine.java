@@ -75,6 +75,7 @@ public class Engine {
         	return false;
         }
         catch (Exception e) {
+            e.printStackTrace();
         	this.assemblerUnit.add(new Error<Integer>(this.numberOfLine + 1, parser.getReturnValueObjects(), "Operand out of bounds"));
         	return false;
         }

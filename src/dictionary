@@ -36,7 +36,7 @@ stv.u8      0xB2 Store variable
 incv.u8     0xB3 Increment variable
 decv.u8     0xB4 Decrement variable
 enter.u8    0xBF Set up frame on function entry
-lda.i16     0xD5 Load address
+lda.i16*     0xD5 Load address
 ldc.i8      0xD9 Load an 8-bit constant
 ldc.i16     0xDA Load a 16-bit constant
 ldc.i32     0xDB Load a 32-bit constant

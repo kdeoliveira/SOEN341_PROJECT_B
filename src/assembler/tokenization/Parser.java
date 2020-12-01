@@ -1,7 +1,6 @@
 package assembler.tokenization;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import assembler.Vertex;
 import util.BinaryAddress;
@@ -36,7 +35,6 @@ public class Parser implements Parsable{
         if(type.size() > 1)
             type.removeIf(n -> n == FORMAT.COMMENT);
 
-        // System.out.println(Arrays.toString(object));
 
         if(this.internalParser(type.toArray(new FORMAT[0])))
         {
@@ -51,7 +49,6 @@ public class Parser implements Parsable{
                         this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
                     }
                     else{
-                        System.out.println("Index: "+i+object[i]);
                         this.iLineStatement.setLabel(Token.class.cast(object[i]).getValue());
                     }
                 }
@@ -65,8 +62,13 @@ public class Parser implements Parsable{
                     this.iLineStatement.setInstruction(new Instruction(new BinaryAddress(0), Token.class.cast(object[i]).getValue().getKey(), typeEBNF), Token.class.cast(object[i]).hasParameters());
                 if(type.get(i).equals(FORMAT.STRINGOPERAND))
                     this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
-                if(type.get(i).equals(FORMAT.OPERAND))
+                if(type.get(i).equals(FORMAT.OPERAND)){
+                    if(this.iLineStatement.hasOnlyLabels()){
+                        this.returnValueObjects.add(new Error<Integer>(0, List.of(object), "Semantic does not match any valid EBNF format"));
+                        return false;
+                    } 
                     this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
+                }
                 
             }
             
