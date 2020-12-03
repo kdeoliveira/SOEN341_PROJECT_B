@@ -26,7 +26,7 @@ public class cma {
         System.out.println("Label List #"+eng.getAssemblerUnit().sizeLabel());
         System.out.println("#\tMemory Address\tMachine Code\tLabel");
         for(int i = 0; i < eng.getAssemblerUnit().sizeLabel() ; i++){
-            System.out.println(eng.getAssemblerUnit().getLabelNumber(i)+"\t"+eng.getAssemblerUnit().getLabel(i).getValue()+"\t"+
+            System.out.println(eng.getAssemblerUnit().getLabelNumber(i)+"\t"+
             eng.getAssemblerUnit().getLabel(i));
         }
     }
@@ -38,14 +38,11 @@ public class cma {
     }
     public static void printBinaryCode(Engine eng, PrintStream file){
         for(int i = 0; i < eng.getAssemblerUnit().sizeLineStatement() ; i++){
-            System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode());
-            
+            System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode().getHexCode());
             file.write((int)eng.getAssemblerUnit().getLineStatements(i).getMachineCode().getBinaryAddress());
         }
         System.out.println();
-    }
-
-    
+    }    
     public static void main(String[] args) throws IOException {
         IListing       cmaListing  = cmaFactory.makeListing();
         IAdministrator admin       = cmaFactory.makeAdmin(args);

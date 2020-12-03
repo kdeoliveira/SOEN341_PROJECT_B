@@ -8,14 +8,14 @@
 5  |	0004		A3		Loop	ldv.u3		3 	
 6  |	0005		D90A			ldc.i8		10	
 7  |	0006		1C			tlt			
-8  |	0007		5F			brf.i5		Done	
+8  |	0007		5E			brf.i5		Done	
 9  |	0008		A1			ldv.u3		1	
-10 |	0009		6B657669...		.cstring	"kevin"	
-11 |	000A		A0			ldv.u3		0	
-12 |	000B		13			add			
-13 |	000C		A9			stv.u3		1	
-14 |	000D		B300					0	
-15 |	000E		34			br.i5		Loop	
-16 |	000F		F		Done	
+10 |	0009		A0			ldv.u3		0	
+11 |	000A		13			add			
+12 |	000B		A9			stv.u3		1	
+13 |	000C		B30A			incv.u8		10	
+14 |	000D		34			br.i5		Loop	
+15 |	000E		E		Done	
+16 |	000F		5465616D...		.cstring	"TeamB6"	
 17 |	0010		00			halt			
 -------------------------------------------------------------------------

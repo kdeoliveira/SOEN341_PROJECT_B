@@ -9,11 +9,11 @@ Loop      ldv.u3     3
           tlt
           brf.i5     Done
           ldv.u3     1
-          .cstring   "kevin"
           ldv.u3     0
           add
           stv.u3     1
-          incv.u8    0
+          incv.u8    10
 		      br.i5      Loop
 Done
+          .cstring   "TeamB6"
           halt 

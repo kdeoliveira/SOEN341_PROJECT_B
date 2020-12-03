@@ -58,6 +58,7 @@ public class Parser implements Parsable{
                 
                 if(type.get(i).equals(FORMAT.OPCODEINHERENT) || type.get(i).equals(FORMAT.OPCODERELATIVE) || type.get(i).equals(FORMAT.OPCODEIMMEDIATE))
                     this.iLineStatement.setInstruction(new Instruction(Token.class.cast(object[i]).getValue(), null, typeEBNF), Token.class.cast(object[i]).hasParameters());
+                
                 if(type.get(i).equals(FORMAT.DIRECTIVE))
                     this.iLineStatement.setInstruction(new Instruction(new BinaryAddress(0), Token.class.cast(object[i]).getValue().getKey(), typeEBNF), Token.class.cast(object[i]).hasParameters());
                 if(type.get(i).equals(FORMAT.STRINGOPERAND))
@@ -70,9 +71,10 @@ public class Parser implements Parsable{
                     this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
                 }
                 
-            }
-            
+            }            
+
             this.iLineStatement.setTypeEBNF(typeEBNF);
+
 
             
             this.returnValueObjects.add(Arrays.toString(object));

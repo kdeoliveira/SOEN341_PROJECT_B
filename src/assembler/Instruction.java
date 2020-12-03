@@ -82,7 +82,7 @@ public class Instruction extends Node{
 
     @Override
     public String toString() {
-        if(this.opcode != null && this.opcode.key.length() < 7)
+        if(this.opcode != null && this.opcode.key.length() <= 7)
             return String.format("%s\t\t%s", this.opcode.getKey(), this.operand != null ? this.operand.getKey() : "");
         else if(this.opcode != null && this.opcode.key.length() > 7)
             return String.format("%s\t%s", this.opcode.getKey(), this.operand != null ? this.operand.getKey() : "");
