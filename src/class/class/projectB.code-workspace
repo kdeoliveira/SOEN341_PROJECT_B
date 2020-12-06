@@ -10,6 +10,8 @@
 			"**/.project": true,
 			"**/.settings": true,
 			"**/.factorypath": true
-		}
+		},
+		"sonarlint.output.showVerboseLogs": true,
+		"sonarlint.output.showAnalyzerLogs": true
 	}
 }

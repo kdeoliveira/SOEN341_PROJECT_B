@@ -1,10 +1,10 @@
   ; Sample program
 	
-          ldc.i3     0
+          ldc.i3     -2
           dup
           stv.u3     0
-          stv.u3     1 
-Loop      ldv.u3     Loop
+          stv.u3     1
+Loop      ldv.u3     3
           ldc.i8     10
           tlt
           brf.i5     Done
@@ -12,7 +12,8 @@ Loop      ldv.u3     Loop
           ldv.u3     0
           add
           stv.u3     1
-          incv.u8    0
-		  br.i5      Loop
+          incv.u8    10
+		      br.i5      Loop
 Done
+          .cstring   "TeamB6"
           halt 
