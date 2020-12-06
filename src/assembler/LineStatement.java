@@ -16,7 +16,6 @@ public class LineStatement{
 
 	/**
 	 * Generates a line of statement based on Nodes and Comment
-	 * TODO: Factory class
 	 * 
 	 * @param lineNumber
 	 * @param label
@@ -98,7 +97,7 @@ public class LineStatement{
 	public void checkBinaryValue(int lineNumber){
 		this.lineNumber = lineNumber;
 		if(label != null)
-			label.setValue(new BinaryAddress((long) this.lineNumber-1, 16));
+			label.setValue(new BinaryAddress((long) (this.lineNumber-1) * 2, 16));
 		if(this.instruction == null && this.label != null)
 			this.machineCode = this.label.getValue();
 		else if(this.instruction == null)
@@ -107,18 +106,6 @@ public class LineStatement{
 			this.machineCode = this.instruction.getValue();
 	}
 
-	// public Node getopcode() {
-	// 	return opcode;
-	// }
-	// public void setopcode(Node opcode) {
-	// 	this.opcode = opcode;
-	// }
-	// public Node getOperand() {
-	// 	return operand;
-	// }
-	// public void setOperand(Node operand) {
-	// 	this.operand = operand;
-	// }
 	public Instruction getInstruction() {
 		return instruction;
 	}
@@ -140,14 +127,17 @@ public class LineStatement{
 		if(this.label != null && typeEBNF.equals(EBNF.INHERENT2.name()))
 			str.append(String.format("\t\t%s\t%s",this.label.getKey(), this.instruction));
 		else if(this.label != null && this.instruction != null){
-			str.append(String.format("\t\t%s\t%s ",this.label.getKey(), this.instruction));
+			if(this.machineCode.getFormat() > 32)
+				str.append(String.format("\t%s\t%s ",this.label.getKey(), this.instruction));
+			else
+				str.append(String.format("\t\t%s\t%s ",this.label.getKey(), this.instruction));
 			
 
 		}
 		else if(this.instruction == null && this.label != null)
 			str.append(String.format("\t\t%s",label.getKey()));
 		else
-			if(this.machineCode.getFormat() > 16)
+			if(this.machineCode.getFormat() > 24)
 				str.append(String.format("\t\t%s", this.instruction == null ? "" : this.instruction));
 			else
 				str.append(String.format("\t\t\t%s", this.instruction == null ? "" : this.instruction));

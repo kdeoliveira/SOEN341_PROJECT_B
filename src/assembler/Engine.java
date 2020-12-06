@@ -61,7 +61,7 @@ public class Engine {
 	    	if(!parser.parse(code)) {
 	            
 	            if(parser.getReturnValueObjects() == null)
-	                this.assemblerUnit.add(new Error<Integer>(0, "Unknown", "Incorrect format"));
+	                this.assemblerUnit.add(new Error<Integer>(this.numberOfLine + 1, "Unknown", "Incorrect format"));
 	            else{
 	                for(CharSequence x : parser.getReturnValueObjects())
 	                    this.assemblerUnit.add(x);
@@ -96,9 +96,17 @@ public class Engine {
 
             for(int j=0; j < assemblerUnit.sizeLabel() ; j++){
                 if(assemblerUnit.getLineStatements(i).getOperand() != null && assemblerUnit.getLabel(j).getKey().equals(assemblerUnit.getLineStatements(i).getOperand().getKey())){
-                    assemblerUnit.getLineStatements(i).getInstruction().setOperand(
-                        assemblerUnit.getLabel(j)
-                    );
+                    assemblerUnit.getLabel(j).setValue(new BinaryAddress( assemblerUnit.getLabel(j).getValue().getBinaryAddress() - (assemblerUnit.getLineStatements(i).getLineNumber() - 1) * 2) );
+                    try{
+                        assemblerUnit.getLineStatements(i).getInstruction().setOperand(
+                            assemblerUnit.getLabel(j)
+                        );
+                    }
+                    catch(UnsupportedOperationException e){
+                        this.assemblerUnit.add(new Error<Integer>(assemblerUnit.getLineStatements(i).getLineNumber(), "Binary out of bound", "Label \""+assemblerUnit.getLabel(j).getKey()+"\" address is beyond range"));
+                        return false;
+                    }
+
                     assemblerUnit.getLineStatements(i).checkBinaryValue();
                 }
 

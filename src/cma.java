@@ -16,7 +16,7 @@ public class cma {
         System.out.println("-------------------------------------------------------------------------");
         for(int i = 0; i < eng.getAssemblerUnit().getNumberOfLines() ; i++){
             System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+(eng.getAssemblerUnit().getLineStatements(i).getLineNumber() > 9 ? " |": "  |")+
-            "\t"+new BinaryAddress(i, false, 16).getHexCode()+"\t\t"+
+            "\t"+new BinaryAddress(i*2, false, 16).getHexCode()+"\t\t"+
             eng.getAssemblerUnit().getLineStatements(i)
             );
         }

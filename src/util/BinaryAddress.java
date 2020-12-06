@@ -111,11 +111,11 @@ public class BinaryAddress {
             int lowBound = (int) (Math.pow(2, this.format)/2 ) * -1;
             int upperBound = (int) (Math.pow(2, this.format)/2 ) - 1;
             if(!(this.binaryAddress <= upperBound && this.binaryAddress >= lowBound))
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Signed value is out of bound");
+            
         }else
             if(this.binaryAddress < 0 || this.binaryAddress > (long) Math.pow(2, this.format) - 1){
-                System.out.println("BinaryAddress.java: "+binaryAddress);
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Unsigned value is out of bound");
             }
             
     }
@@ -210,8 +210,6 @@ public class BinaryAddress {
     }
 
     public BinaryAddress concat(BinaryAddress x){
-        // System.out.println("--->"+Integer.toHexString(binaryAddress)+"+"+x.binaryAddress+"\t"+format+"+"+x.format);
-        // System.out.println("Result--->"+Integer.toHexString((this.binaryAddress << x.format) + (x.binaryAddress & 0xff)));
         return new BinaryAddress(((this.binaryAddress << x.format) + (x.binaryAddress & (int) Math.pow(2, x.format) - 1)), false, (this.format+x.format));
     }
 
@@ -229,31 +227,4 @@ public class BinaryAddress {
         }
         return new BinaryAddress(result,false, cnt*8);
     }
-
-
-
-    public static void main(String[] args){
-        BinaryAddress mem = new BinaryAddress("0xBF", false);
-        BinaryAddress mem1 = new BinaryAddress(-4, true, 3);
-
-        System.out.println(BinaryAddress.toBinary("Kevin").getHexCode());
-
-
-
-        // System.out.println(mem +"\t" + mem.getHexCode());
-        // System.out.println(mem1 +"\t" + mem1.getHexCode());
-        // System.out.println(mem.concat(mem1).getHexCode());
-        // System.out.println();
-        // mem.plus(mem1);
-        // System.out.println("After plus: "+mem +"\t" + mem.getHexCode());
-
-        // System.out.println();
-
-        // System.out.println("After add" + mem.add(mem1) +"\n" + mem.add(mem1).getHexCode());
-        
-        // System.out.println();
-
-
-    }
-
 }

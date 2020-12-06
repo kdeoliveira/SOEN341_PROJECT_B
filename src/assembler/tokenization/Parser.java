@@ -117,29 +117,4 @@ public class Parser implements Parsable{
     public String getTypeEBNF() {
         return this.typeEBNF;
     }
-
-    public static void main(String[] args){
-        Lexer lex = new Lexer();
-        System.out.println(lex.tokenization("","add.u8","-3"));
-
-        Vertex<?>[] tokens = lex.getTokens().toArray(new Vertex<?>[0]);
-
-        Parser parser = new Parser();
-
-        System.out.println(parser.parse(tokens));
-
-        
-        System.out.println(parser.getReturnValueObjects());
-        System.out.println(parser.getTypeEBNF());
-
-
-        /**
-         * Expected result of main:
-[Label (LABEL)]
-[[Label (LABEL)]]
-LABEL
-         */
-    }
-
-
 }

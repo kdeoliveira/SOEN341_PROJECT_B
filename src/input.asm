@@ -13,7 +13,7 @@ Loop      ldv.u3     3
           add
           stv.u3     1
           incv.u8    10
-		      br.i5      Loop
+		      br.i8      Loop
 Done
-          .cstring   "TeamB6"
+Test     .cstring   "TeamB6"
           halt 

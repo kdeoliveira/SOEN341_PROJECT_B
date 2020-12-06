@@ -2,20 +2,20 @@
 #  |	Memory Address	Machine Code	Label	Mnemonic	Operand |
 -------------------------------------------------------------------------
 1  |	0000		96			ldc.i3		-2	
-2  |	0001		02			dup			
-3  |	0002		A8			stv.u3		0	
-4  |	0003		A9			stv.u3		1	
-5  |	0004		A3		Loop	ldv.u3		3 	
-6  |	0005		D90A			ldc.i8		10	
-7  |	0006		1C			tlt			
-8  |	0007		5E			brf.i5		Done	
-9  |	0008		A1			ldv.u3		1	
-10 |	0009		A0			ldv.u3		0	
-11 |	000A		13			add			
-12 |	000B		A9			stv.u3		1	
-13 |	000C		B30A			incv.u8		10	
-14 |	000D		34			br.i5		Loop	
-15 |	000E		E		Done	
-16 |	000F		5465616D...		.cstring	"TeamB6"	
-17 |	0010		00			halt			
+2  |	0002		02			dup			
+3  |	0004		A8			stv.u3		0	
+4  |	0006		A9			stv.u3		1	
+5  |	0008		A3		Loop	ldv.u3		3 	
+6  |	000A		D90A			ldc.i8		10	
+7  |	000C		1C			tlt			
+8  |	000E		5E			brf.i5		Done	
+9  |	0010		A1			ldv.u3		1	
+10 |	0012		A0			ldv.u3		0	
+11 |	0014		13			add			
+12 |	0016		A9			stv.u3		1	
+13 |	0018		B30A			incv.u8		10	
+14 |	001A		E000EE			br.i8		Loop	
+15 |	001C		001C		Done	
+16 |	001E		5465616D...	Test	.cstring	"TeamB6" 	
+17 |	0020		00			halt			
 -------------------------------------------------------------------------

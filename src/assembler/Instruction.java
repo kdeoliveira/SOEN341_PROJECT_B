@@ -48,20 +48,9 @@ public class Instruction extends Node{
         this.operand = operand;
         if(opcode.getKey().contains(".") && !opcode.getKey().startsWith(".")){
             String[] temp = opcode.getKey().split("\\.");
-            
             this.operand.getValue().setFormat(Integer.parseInt( String.valueOf(temp[1].substring(1)) ));
             this.operand.getValue().setSigned(String.valueOf(temp[1].charAt(0)));
         }
-        // else{
-        //     //Default values
-        //     this.operand.getValue().setFormat(value.getFormat() + operand.getValue().getFormat());
-        //     this.operand.getValue().setSigned(false);
-        // }
-
-        // System.out.println("Instruction.java --> "+
-        // this.value+": "+this.value.getFormat()+" = "+
-        // opcode.key+": "+opcode.getValue().getFormat()+" | "+    
-        // operand.key+": "+operand.getValue().getFormat());
 
         if(this.typeEBNF.equals(EBNF.RELATIVE.name()) || this.typeEBNF.equals(EBNF.RELATIVE1.name()) || this.typeEBNF.equals(EBNF.RELATIVE2.name()) || this.typeEBNF.equals(EBNF.RELATIVE3.name())){
             this.value = this.value.concat(operand.getValue());
@@ -90,17 +79,4 @@ public class Instruction extends Node{
             return String.format("\t\t%s", this.operand != null ? this.operand.getKey() : "");
         }
     }
-
-    public void setInstruction(Node opcode){
-        // String temp;
-        // if(opcode.getKey().contains(".")){
-        //     temp = opcode.getKey().substring(opcode.length()-2, opcode.length());
-
-        // }else{
-
-        // }
-
-
-    }
-
 }
