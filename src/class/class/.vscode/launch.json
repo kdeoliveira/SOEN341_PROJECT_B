@@ -45,7 +45,7 @@
             "request": "launch",
             "mainClass": "cma",
             "projectName": "src",
-            "args": "-v input.asm"
+            "args": "-v TS3.asm"
         },
         {
             "type": "java",

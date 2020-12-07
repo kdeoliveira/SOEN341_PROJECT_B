@@ -52,10 +52,17 @@ public class Instruction extends Node{
             this.operand.getValue().setSigned(String.valueOf(temp[1].charAt(0)));
         }
 
+        if(opcode.getKey().equals("trap")){
+            this.operand.getValue().setSigned("u");
+            this.operand.getValue().setFormat(8);
+        }
+
         if(this.typeEBNF.equals(EBNF.RELATIVE.name()) || this.typeEBNF.equals(EBNF.RELATIVE1.name()) || this.typeEBNF.equals(EBNF.RELATIVE2.name()) || this.typeEBNF.equals(EBNF.RELATIVE3.name())){
+            this.value = this.opcode.getValue();
             this.value = this.value.concat(operand.getValue());
         }
         else{
+            this.value = this.opcode.getValue();
             this.value = opcode.getValue().add(operand.getValue());
         }
 

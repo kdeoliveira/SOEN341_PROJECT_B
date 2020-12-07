@@ -99,10 +99,11 @@ public class Lexer implements Lexical{
                             tokens.add(new Token(x, new Operand(Integer.valueOf(in), in)));
                         }
                     }else{
-                        
                         if(x == FORMAT.OPCODEINHERENT || x == FORMAT.OPCODEIMMEDIATE || x == FORMAT.OPCODERELATIVE){
-
-                            tokens.add(new Token(x, new Node(this.dictMap.get(in), in), ((BinarySearchTree<String>) this.dictMap).isOnlyLabels(in) ));
+                            if(in.equals("trap"))
+                                tokens.add(new Token(FORMAT.OPCODERELATIVE, new Node(this.dictMap.get(in), in), ((BinarySearchTree<String>) this.dictMap).isOnlyLabels(in) ));
+                            else
+                                tokens.add(new Token(x, new Node(this.dictMap.get(in), in), ((BinarySearchTree<String>) this.dictMap).isOnlyLabels(in) ));
                         }
                         else
                             tokens.add(new Token(FORMAT.OPCODERELATIVE, new Node(this.dictMap.get(in), in), ((BinarySearchTree<String>) this.dictMap).isOnlyLabels(in) ));

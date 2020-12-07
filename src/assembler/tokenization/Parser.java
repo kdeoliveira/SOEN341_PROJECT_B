@@ -63,6 +63,7 @@ public class Parser implements Parsable{
                     this.iLineStatement.setInstruction(new Instruction(new BinaryAddress(0), Token.class.cast(object[i]).getValue().getKey(), typeEBNF), Token.class.cast(object[i]).hasParameters());
                 if(type.get(i).equals(FORMAT.STRINGOPERAND))
                     this.iLineStatement.setOperand(Token.class.cast(object[i]).getValue());
+                
                 if(type.get(i).equals(FORMAT.OPERAND)){
                     if(this.iLineStatement.hasOnlyLabels()){
                         this.returnValueObjects.add(new Error<Integer>(0, List.of(object), "Semantic does not match any valid EBNF format"));

@@ -44,7 +44,7 @@ public class Node implements Vertex<String>{
 
     @Override
     public String toString(){
-        return String.format("%s\t%s\t%s", this.value, value.getHexCode(), key);
+        return String.format("%s\t%s", value.getHexCode(), key);
     }
 
     @Override

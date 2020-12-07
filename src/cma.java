@@ -1,6 +1,7 @@
 // cma.java - (c) 2020 by Team B6: Cm assembler
 
 import java.io.*;
+
 import assembler.*;
 import assembler.tokenization.*;
 import java.util.*;
@@ -10,38 +11,63 @@ import util.*;
 
 public class cma {
 
-    public static void printLines(Engine eng){
+    public static void printLines(Engine eng) {
         System.out.println("-------------------------------------------------------------------------");
         System.out.println("#  |\tMemory Address\tMachine Code\tLabel\tMnemonic\tOperand |");
         System.out.println("-------------------------------------------------------------------------");
-        for(int i = 0; i < eng.getAssemblerUnit().getNumberOfLines() ; i++){
-            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()+(eng.getAssemblerUnit().getLineStatements(i).getLineNumber() > 9 ? " |": "  |")+
-            "\t"+new BinaryAddress(i*2, false, 16).getHexCode()+"\t\t"+
-            eng.getAssemblerUnit().getLineStatements(i)
-            );
+        for (int i = 0; i < eng.getAssemblerUnit().getNumberOfLines(); i++) {
+            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()
+                    + (eng.getAssemblerUnit().getLineStatements(i).getLineNumber() > 9 ? " |" : "  |") + "\t"
+                    + new BinaryAddress(i * 2, false, 16).getHexCode() + "\t\t"
+                    + eng.getAssemblerUnit().getLineStatements(i));
         }
         System.out.println("-------------------------------------------------------------------------");
     }
-    public static void printSymbols(Engine eng){
-        System.out.println("Label List #"+eng.getAssemblerUnit().sizeLabel());
+
+    public static void printSymbols(Engine eng) {
+        System.out.println("Label List #" + eng.getAssemblerUnit().sizeLabel());
         System.out.println("#\tMemory Address\tMachine Code\tLabel");
-        for(int i = 0; i < eng.getAssemblerUnit().sizeLabel() ; i++){
-            System.out.println(eng.getAssemblerUnit().getLabelNumber(i)+"\t"+
-            eng.getAssemblerUnit().getLabel(i));
+        for (int i = 0; i < eng.getAssemblerUnit().sizeLabel(); i++) {
+            System.out.println(eng.getAssemblerUnit().getLabelNumber(i) + "\t" + eng.getAssemblerUnit().getLabel(i));
         }
     }
-    public static void printErrors(Engine eng){
-        System.out.println("Error "+eng.getAssemblerUnit().sizeError());
-        for(CharSequence x : eng.getAssemblerUnit().getListofErrors()){
+
+    public static void printErrors(Engine eng) {
+        System.out.println("Error " + eng.getAssemblerUnit().sizeError());
+        for (CharSequence x : eng.getAssemblerUnit().getListofErrors()) {
             System.out.println(x.toString());
         }
     }
-    public static void printBinaryCode(Engine eng, PrintStream file){
-        for(int i = 0; i < eng.getAssemblerUnit().sizeLineStatement() ; i++){
-            System.out.print(eng.getAssemblerUnit().getLineStatements(i).getMachineCode().getHexCode());
-            file.write((int)eng.getAssemblerUnit().getLineStatements(i).getMachineCode().getBinaryAddress());
-        }
-        System.out.println();
+
+    public static void printBinaryCode(Engine eng, PrintStream file) {
+        StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < eng.getAssemblerUnit().sizeLineStatement(); i++) {
+
+                for( int j = 0; j < eng.getAssemblerUnit().getLineStatements(i).getMachineCode().hexCodeToArray().length ; j++){
+                    str.append(
+                        eng.getAssemblerUnit().getLineStatements(i).getMachineCode().hexCodeToArray()[j]
+                    );
+
+                    if(str.length() == 2){
+
+                        file.write(
+                        Integer.parseInt( str.toString(), 16 )
+                        );
+                        str.delete(0, str.length());
+                    }
+                    else if( str.length() < 2 && j == eng.getAssemblerUnit().getLineStatements(i).getMachineCode().hexCodeToArray().length - 1 ){
+                        str.append('0');
+
+
+                        file.write(
+                            Integer.parseInt( str.toString(), 16 )
+                            );
+                            str.delete(0, str.length());
+                    }
+                }
+            }
+
     }    
     public static void main(String[] args) throws IOException {
         IListing       cmaListing  = cmaFactory.makeListing();

@@ -97,6 +97,7 @@ public class Engine {
             for(int j=0; j < assemblerUnit.sizeLabel() ; j++){
                 if(assemblerUnit.getLineStatements(i).getOperand() != null && assemblerUnit.getLabel(j).getKey().equals(assemblerUnit.getLineStatements(i).getOperand().getKey())){
                     assemblerUnit.getLabel(j).setValue(new BinaryAddress( assemblerUnit.getLabel(j).getValue().getBinaryAddress() - (assemblerUnit.getLineStatements(i).getLineNumber() - 1) * 2) );
+                    
                     try{
                         assemblerUnit.getLineStatements(i).getInstruction().setOperand(
                             assemblerUnit.getLabel(j)

@@ -6,7 +6,7 @@ public enum FORMAT {
     OPCODEINHERENT("([a-z]){2,}"),
     // OPCODE("([a-z])+(\\.[ui](3|5|8)$)?"),
     DIRECTIVE("[.][a-z]{2,}"),
-    LABEL("\\p{Upper}\\p{Lower}+"),
+    LABEL("\\p{Upper}\\p{Lower}+(\\d)?"),
     OPERAND("-?\\d+"),
     COMMENT("[;].+"),
     STRINGOPERAND("\"\\p{ASCII}+\"");

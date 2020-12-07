@@ -65,6 +65,10 @@ public class BinaryAddress {
         return hexCode != null ? this.hexFormat(hexCode) : null;
     }
 
+    public char[] hexCodeToArray(){
+        return this.hexCode;
+    }
+
     public long getBinaryAddress(){
         return this.binaryAddress;
     }
