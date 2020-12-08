@@ -9,66 +9,7 @@ import java.util.*;
 import admin.*;
 import util.*;
 
-public class cma {
-
-    public static void printLines(Engine eng) {
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.println("#  |\tMemory Address\tMachine Code\tLabel\tMnemonic\tOperand |");
-        System.out.println("-------------------------------------------------------------------------");
-        for (int i = 0; i < eng.getAssemblerUnit().getNumberOfLines(); i++) {
-            System.out.println(eng.getAssemblerUnit().getLineStatements(i).getLineNumber()
-                    + (eng.getAssemblerUnit().getLineStatements(i).getLineNumber() > 9 ? " |" : "  |") + "\t"
-                    + new BinaryAddress(i * 2, false, 16).getHexCode() + "\t\t"
-                    + eng.getAssemblerUnit().getLineStatements(i));
-        }
-        System.out.println("-------------------------------------------------------------------------");
-    }
-
-    public static void printSymbols(Engine eng) {
-        System.out.println("Label List #" + eng.getAssemblerUnit().sizeLabel());
-        System.out.println("#\tMemory Address\tMachine Code\tLabel");
-        for (int i = 0; i < eng.getAssemblerUnit().sizeLabel(); i++) {
-            System.out.println(eng.getAssemblerUnit().getLabelNumber(i) + "\t" + eng.getAssemblerUnit().getLabel(i));
-        }
-    }
-
-    public static void printErrors(Engine eng) {
-        System.out.println("Error " + eng.getAssemblerUnit().sizeError());
-        for (CharSequence x : eng.getAssemblerUnit().getListofErrors()) {
-            System.out.println(x.toString());
-        }
-    }
-
-    public static void printBinaryCode(Engine eng, PrintStream file) {
-        StringBuilder str = new StringBuilder();
-
-            for (int i = 0; i < eng.getAssemblerUnit().sizeLineStatement(); i++) {
-
-                for( int j = 0; j < eng.getAssemblerUnit().getLineStatements(i).getMachineCode().hexCodeToArray().length ; j++){
-                    str.append(
-                        eng.getAssemblerUnit().getLineStatements(i).getMachineCode().hexCodeToArray()[j]
-                    );
-
-                    if(str.length() == 2){
-
-                        file.write(
-                        Integer.parseInt( str.toString(), 16 )
-                        );
-                        str.delete(0, str.length());
-                    }
-                    else if( str.length() < 2 && j == eng.getAssemblerUnit().getLineStatements(i).getMachineCode().hexCodeToArray().length - 1 ){
-                        str.append('0');
-
-
-                        file.write(
-                            Integer.parseInt( str.toString(), 16 )
-                            );
-                            str.delete(0, str.length());
-                    }
-                }
-            }
-
-    }    
+public class cma {  
     public static void main(String[] args) throws IOException {
         IListing       cmaListing  = cmaFactory.makeListing();
         IAdministrator admin       = cmaFactory.makeAdmin(args);
@@ -83,10 +24,15 @@ public class cma {
         // Checking valid options have been enabled.
         if (options.get("help").isEnabled()) {
             admin.usage();
-        } else if (options.get("listing").isEnabled()) {
-            admin.outputln(cmaListing.toString());
         }
+
+        
+        
         boolean verbose = options.get("verbose").isEnabled();
+
+
+        if(verbose || options.get("listing").isEnabled())
+            admin.logo();
 
         // Executing.
         ArrayList<String> files = admin.getArguments();
@@ -103,8 +49,6 @@ public class cma {
             }
             if (verbose) admin.outputln("cma: Opening '" + filename + "'");
             
-            // admin.output(filename + ": ");
-
             try(ReadLine dictFile = new ReadLine("dictionary",3);
             ReadLine src = new ReadLine(file,4);
             PrintStream stream = new PrintStream(new File(srcListingFile));
@@ -120,38 +64,42 @@ public class cma {
                 Engine eng = new Engine(dic, new Lexer(dic), new Parser());
 
                 
-
-                
                 for(String[] x : src){
-                    if(!eng.assemble(x))
+                    if(!eng.assemble(x)){
+                        if(verbose)
+                            eng.getAssemblerUnit().printErrors();
                         break;
-                }
-                eng.pass2();
-
-                
-
-                printBinaryCode(eng, executable);
-                
-                
-                System.out.println();
-                if (verbose){
-                    System.setOut(System.out);
-                    printLines(eng);
-                    printSymbols(eng);
-                    printErrors(eng);
-                    
-                    admin.outputln("cma: Closing '" + filename + "'");  
+                    }else
+                        if(verbose)
+                            admin.output(".");
                 }
 
-                
-                System.setOut(stream);
-                printLines(eng);
-                
-                System.setOut(symbols);
-                printSymbols(eng);
 
-                System.setOut(errors);            
-                printErrors(eng);
+                if(verbose)
+                    admin.outputln("\nFirst pass completed");
+                
+                if(eng.pass2() && verbose)
+                    admin.outputln("Second pass completed");
+                
+
+                if (options.get("listing").isEnabled()) {
+                    admin.outputln("Line Statemnts: ");
+                    eng.getAssemblerUnit().printLineStatements();
+                    admin.outputln("Symbolic Labels: ");
+                    eng.getAssemblerUnit().printSymbolicLabels();
+                    admin.outputln("Errors: ");
+                    eng.getAssemblerUnit().printErrors();
+                }
+
+                if(verbose){
+                    admin.outputln("cma: Closing '" + filename + "'");
+                }
+
+
+                eng.getAssemblerUnit().exportBinaryCode(executable);
+                eng.getAssemblerUnit().exportLineStatements(stream);
+                eng.getAssemblerUnit().exportErrors(errors);
+                eng.getAssemblerUnit().exportSymbolicLabels(symbols);   
                 
 
             }
@@ -162,7 +110,7 @@ public class cma {
             
             
         }            
-        admin.outputln("");
+        // admin.outputln("");
     }
 }
 

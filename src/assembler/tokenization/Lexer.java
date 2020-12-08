@@ -157,20 +157,4 @@ public class Lexer implements Lexical{
         this.tokenLength = 0;
     }
 
-    public static void main(String[] args){
-            Lexer lex = new Lexer();
-            System.out.println(lex.tokenization("", "add*", ";kfsfsd"));
-            System.out.println((lex.getTokens()));
-            System.out.println(lex.getTokenPosition()+" - "+lex.getTokenLength());
-
-            /**
-             * Expected result of main:
-            [(Unknown:1) [ Label]]
-            1 - 17
-            [Label (LABEL), add (OPCODE), ;kfsfsd (COMMENT)]
-            0 - 16
-            [(Unknown:6) [add]]
-            6 - 15
-             */
-    }
 }

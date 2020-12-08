@@ -1,8 +1,11 @@
 package assembler;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.*;
 
 import assembler.tokenization.EBNF;
+import util.BinaryAddress;
 
 public class AssemblerUnit {
     private List<LineStatement> lines;
@@ -98,5 +101,77 @@ public class AssemblerUnit {
 
     public int getNumberOfLines(){
         return this.numberOfLine;
+    }
+
+    public void printLineStatements(){
+        System.out.println("#  |\tMemory Address\tMachine Code\tLabel\tMnemonic\tOperand |");
+        System.out.println("-------------------------------------------------------------------------");
+        for (int i = 0; i < this.numberOfLine; i++) {
+            System.out.println(
+                this.getLineStatements(i).getLineNumber()
+                    + (this.getLineStatements(i).getLineNumber() > 9 ? " |" : "  |") + "\t"
+                    + new BinaryAddress((long) i * 2, false, 16).getHexCode() + "\t\t"
+                    + this.getLineStatements(i));
+        }
+    }
+
+    public void printSymbolicLabels(){
+        System.out.println("#\tHex\tLabel");
+        System.out.println("----------------------");
+        for (int i = 0; i < this.sizeLabel(); i++) {
+            System.out.println(this.getLabelNumber(i) + "\t" + this.getLabel(i));
+        }
+    }
+
+    public void printErrors(){
+        for (CharSequence x : this.getListofErrors()) {
+            System.out.println(x.toString());
+        }
+    }
+
+    public void exportLineStatements(PrintStream file){
+        System.setOut(file);
+        this.printLineStatements();
+        System.setOut(System.out);
+    }
+
+    public void exportSymbolicLabels(PrintStream file){
+        System.setOut(file);
+        this.printSymbolicLabels();
+        System.setOut(System.out);
+    }
+    public void exportErrors(PrintStream file){
+        System.setOut(file);
+        this.printErrors();
+        System.setOut(System.out);
+    }
+    public void exportBinaryCode(PrintStream file){
+        StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < this.sizeLineStatement(); i++) {
+
+                for( int j = 0; j < this.getLineStatements(i).getMachineCode().hexCodeToArray().length ; j++){
+                    str.append(
+                        this.getLineStatements(i).getMachineCode().hexCodeToArray()[j]
+                    );
+
+                    if(str.length() == 2){
+
+                        file.write(
+                        Integer.parseInt( str.toString(), 16 )
+                        );
+                        str.delete(0, str.length());
+                    }
+                    else if( str.length() < 2 && j == this.getLineStatements(i).getMachineCode().hexCodeToArray().length - 1 ){
+                        str.append('0');
+
+
+                        file.write(
+                            Integer.parseInt( str.toString(), 16 )
+                            );
+                            str.delete(0, str.length());
+                    }
+                }
+            }
     }
 }

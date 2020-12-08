@@ -1,6 +1,0 @@
-Label List #4
-#	Memory Address	Machine Code	Label
-1	0000	Main
-6	FFFFFFFFFFFFFFFC	Fct
-10	0010	Msg
-11	000E	Msg2

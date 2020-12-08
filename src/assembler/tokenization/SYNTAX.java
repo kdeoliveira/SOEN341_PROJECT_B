@@ -17,10 +17,5 @@ public enum SYNTAX{
         return pattern;
     }
 
-    public static void main(String[] args){
-        for(SYNTAX x : SYNTAX.values()){
-            System.out.println(x+" "+x.getPattern());
-        }
-    }
 }
 
